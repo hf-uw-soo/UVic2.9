@@ -113,7 +113,7 @@
 # if defined O_plume
       real  work(imt,km,jsmw:jemw)
 # endif
-# if defined O_npzd || defined O_carbon_14
+# if defined O_npzd || defined O_carbon_14 || defined O_ideal_age
       real ai, hi, hs, rctheta, dayfrac, swr, declin
       real src(imt,km,jsmw:jemw,nsrc)
 #  ifdef O_TMM
@@ -733,6 +733,18 @@
         enddo
       enddo
 # endif
+# if defined O_ideal_age
+      do j=js,je
+        jrow = j + joff
+        do i=is,ie
+          if (kmt(i,jrow) .gt. 0) then
+             do k=1,kmt(i,jrow)
+                src(i,k,j,isideal) = 1.0/(86400.*365.) ! results in years
+             enddo
+          endif
+        enddo
+      enddo
+# endif
 
 #ifndef O_TMM
 !-----------------------------------------------------------------------
@@ -909,7 +921,7 @@
           enddo
         enddo
 
-# if defined O_source_term || defined O_npzd || defined O_carbon_14
+# if defined O_source_term || defined O_npzd || defined O_carbon_14 || defined O_ideal_age
 
 !-----------------------------------------------------------------------
 !       set source term for "T" cells
@@ -917,7 +929,7 @@
 
         source(:,:,:) = c0
 
-#  if defined O_npzd || defined O_carbon_14
+#  if defined O_npzd || defined O_carbon_14 || defined O_ideal_age
         if (itrc(n) .ne. 0) then
           do j=js,je
             do k=1,km
@@ -961,7 +973,7 @@ c,src(50,5,50,itrc(ipo4))
      &          - ADV_Txiso(i,k,j,n) - ADV_Tyiso(i,k,j,jrow,n)
      &          - ADV_Tziso(i,k,j)
 # endif
-# if defined O_source_term || defined O_npzd || defined O_carbon_14
+# if defined O_source_term || defined O_npzd || defined O_carbon_14 || defined O_ideal_age
      &          + source(i,k,j)
 # endif
 # if defined O_plume
@@ -1098,6 +1110,18 @@ c,src(50,5,50,itrc(ipo4))
           call setbcx (t(1,1,j,n,taup1), imt, km)
         enddo
       enddo
+
+# if defined O_ideal_age
+! set ideal age in surface layer to 0
+      do j=js,je
+         jrow = j + joff
+         do i=istrt,iend
+            if (kmt(i,jrow) .gt. 0) then
+               t(i,1,j,iideal,taup1) = c0
+            endif
+         enddo
+      enddo
+# endif
 
 !-----------------------------------------------------------------------
 !     construct diagnostics after filtering (for total dT/dt)

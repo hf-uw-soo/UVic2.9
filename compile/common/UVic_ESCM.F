@@ -218,7 +218,7 @@
 !-----------------------------------------------------------------------
 
       do n=1,numseg
-
+        print *, 'segment ', n, numseg
 !-----------------------------------------------------------------------
 !       get the atmospheric S.B.C.
 !-----------------------------------------------------------------------
@@ -1323,6 +1323,9 @@
 #   endif
 #  endif     
 # endif
+# if defined O_ideal_age
+      call set (iideal, m, mapt(m), 'idealage', m)
+# endif
       if ( m-1 .gt. nt) then
         print*, '==> Error: increase nt for tracers in size.h'
         stop '=>UVic_ESCM'
@@ -1429,6 +1432,10 @@
       itrc(idiazc13) = m-1
 #   endif
 #  endif
+# endif
+# if defined O_ideal_age
+      call set (isideal, m, mapst(m), 'idealage', m)
+      itrc(iideal) = m-1
 # endif
       if ( m-1 .gt. nt) then
         print*, '==> Error: increase nsrc for tracer sources in size.h'

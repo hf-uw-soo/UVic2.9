@@ -1312,6 +1312,10 @@ C       endif
               elseif (trim(mapt(n)) .eq. 'detr_B') then
                 t(i,k,j,n,taup1) = 1.e-12
 # endif
+# if defined O_ideal_age
+              elseif (trim(mapt(n)) .eq. 'idealage') then
+                t(i,k,j,n,taup1) = c0
+# endif
               else
                 if (k .eq. 1) then
                   t(i,k,j,n,taup1) = c1

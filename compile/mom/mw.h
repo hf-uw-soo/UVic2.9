@@ -114,7 +114,8 @@
 !       icocc  = index for coccolithophores
 !       icaco3   = index for calcite
 !       idetr_B  = index for ballasted detritus
-		       
+!       iideal = index for ideal age tracer
+
       character(10) :: mapt
       common /mw_c/ mapt(nt)
 
@@ -139,7 +140,12 @@
 
       integer icaco3
       common /mw_i/ icaco3
-		       
+       
+#if defined O_ideal_age
+      integer iideal
+      common /mw_i/ iideal
+#endif
+
 !     indicies for ocean tracer source array
 !       istemp  = index for temperature
 !       issalt  = index for salinity
@@ -173,6 +179,7 @@
 !       isdetr_B  = index for ballasted detritus
 !       iscocc  = index for coccolithophores
 !       iscaco3   = index for calcite
+!       isideal = index for ideal age tracer
 !       itrc    = index of tracer sources for all tracers (0 = no source)
 !       mapst   = map for ocean tracer source names
 
@@ -204,6 +211,10 @@
       integer iscaco3
       common /mw_i/ iscaco3
 #endif
+# if defined O_ideal_age
+      integer isideal
+      common /mw_i/ isideal
+# endif
 !-----------------------------------------------------------------------
 !     MW arrays for diagnostic equations and workspace:
 !-----------------------------------------------------------------------
@@ -296,7 +307,7 @@
       real diff_fbiso
       common /mw_r/ diff_fbiso(imt,0:km,jsmw:jemw)
 #endif
-#if defined O_source_term || defined O_npzd || defined O_carbon_14
+#if defined O_source_term || defined O_npzd || defined O_carbon_14 || defined O_ideal_age
       real source
       common /mw_r/ source(imt,km,jsmw:jemw)
 #endif

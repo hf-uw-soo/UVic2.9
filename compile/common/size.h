@@ -80,6 +80,10 @@
      $               +2 ! dfe, detrfe
 # endif
 #endif
+#if defined O_ideal_age
+     $             + 1 ! ideal age tracer
+#endif
+
      $               )
       parameter (nsrc=0
 #if defined O_carbon
@@ -126,6 +130,9 @@
 # if defined O_npzd_iron
      $               +2 ! dfe, detrfe
 # endif
+#endif
+#if defined O_ideal_age
+     $               +1 ! ideal age tracer
 #endif
      $                 )
       parameter (kpzd=km)

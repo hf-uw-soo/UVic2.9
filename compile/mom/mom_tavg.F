@@ -502,6 +502,11 @@
         elseif (trim(mapt(n)) .eq. 'detr_B') then
           call defvar ('O_detr_B', iou, 4, it, -c1, c100, ' ', 'F'
      &,     'CaCO3 ballasted detritus', ' ', 'mol N m-3')
+# if defined O_ideal_age
+        elseif (trim(mapt(n)) .eq. 'idealage') then
+          call defvar ('O_idealage', iou, 4, it, c0, c1e6, ' ', 'F'
+     &,     'Ideal age tracer', ' ', 'years')
+# endif
         else
           if (n .lt. 1000) write(a3,'(i3)') n
           if (n .lt. 100) write(a3,'(i2)') n
@@ -1467,6 +1472,11 @@
         elseif (trim(mapt(n)) .eq. 'cfc12') then
           call putvaramsk('O_cfc12', iou, ln, ib, ic, tmpijk, tmpijkm
      &,     c1, c0)
+# if defined O_ideal_age
+        elseif (trim(mapt(n)) .eq. 'idealage') then
+          call putvaramsk('O_idealage', iou, ln, ib, ic, tmpijk, tmpijkm
+     &,     c1, c0)
+# endif
         else
           if (n .lt. 1000) write(a3, '(i3)') n
           if (n .lt. 100) write(a3, '(i2)') n

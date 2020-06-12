@@ -341,7 +341,7 @@ c     juan: Levin's value was 0.1e-3
                enddo
                do i=1,imt
                   fe_hydr(i,1,k) = fe_hydr(i,2,k)
-                  fe_hydr(i,jmt,k) = fe_hydr(2,j,k)
+                  fe_hydr(i,jmt,k) = fe_hydr(2,jmtm1,k)
                enddo
             enddo
       else
@@ -666,7 +666,7 @@ c     juan: Levin's value was 0.1e-3
 #  if defined O_npzd_caco3         
 c         dissk0 =(1-(CO3-CO3/Omega_c))/(kcal+(CO3-CO3/Omega_C))
 c         dissk1 = min(1.,max(0.,dissk0)) ! Andreas
-         dissk1 = dissk0*(1-Omega_c) ! Andreas 11 d^-1 from Gehlen 2006 
+         dissk1 = dissk0*(1.-Omega_c) ! Andreas 11 d^-1 from Gehlen 2006 
 #  endif         
 # endif
          swr = swr*exp(-kc*phin
@@ -913,8 +913,9 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
          rbdeni(k) = bdeni(k)
 #  endif
 #  if defined O_npzd_nitrogen_15
-         rno3 = max(din15_in(k), trcmin*rn15std/(1+rn15std))
-     &            /max(no3_in(k)-din15_in(k),trcmin*rn15std/(1+rn15std))
+         rno3 = max(din15_in(k), trcmin*rn15std/(1.+rn15std))
+     &            /max(no3_in(k)-din15_in(k),
+     &        trcmin*rn15std/(1.+rn15std))
          rno3 = min(rno3, 2.*rn15std)
          rno3 = max(rno3, rn15std/2.)
          eps_bdeni = eps_bdeni0*exp(-2.5e-6*(zt(k)))
@@ -922,7 +923,7 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
 
          snpzd(imobidin15) = snpzd(imobidin15) 
      &                     + rn15expo*sgb_in(k)*expo 
-     &                     - bbdeni/(1+bbdeni)*sg_bdeni
+     &                     - bbdeni/(1.+bbdeni)*sg_bdeni
 #  endif              
 # endif
 # if defined O_npzd_iron
@@ -1028,18 +1029,18 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
          src(k,isdic) = snpzd(imobidic) - dprca             
 #  endif         
 #  if defined O_carbon_13
-         rtdic13(k) = max(dic13_in(k),trcmin*rc13std/(1+rc13std))
+         rtdic13(k) = max(dic13_in(k),trcmin*rc13std/(1.+rc13std))
      &             / max(dic_in(k),trcmin)
-         rtdic13(k) = min(rtdic13(k), 2.*rc13std/(1+rc13std))
-         rtdic13(k) = max(rtdic13(k), 0.5*rc13std/(1+rc13std))
+         rtdic13(k) = min(rtdic13(k), 2.*rc13std/(1.+rc13std))
+         rtdic13(k) = max(rtdic13(k), 0.5*rc13std/(1.+rc13std))
 
          prca13 = prca13 + dprca*dzt(k)*rtdic13(k)
 #   if defined O_npzd_caco3          
          rtcaco3c13(k) = max(tnpzd(k,imobicaco3c13)
-     &                     ,trcmin*rc13std/(1+rc13std))
+     &                     ,trcmin*rc13std/(1.+rc13std))
      &             / max(tnpzd(k,imobicaco3),trcmin)
-         rtcaco3c13(k) = min(rtcaco3c13(k), 2.*rc13std/(1+rc13std))
-         rtcaco3c13(k) = max(rtcaco3c13(k), 0.5*rc13std/(1+rc13std))
+         rtcaco3c13(k) = min(rtcaco3c13(k), 2.*rc13std/(1.+rc13std))
+         rtcaco3c13(k) = max(rtcaco3c13(k), 0.5*rc13std/(1.+rc13std))
 #   endif
 #   if !defined O_npzd_caco3          
          src(k,isdic13) = src(k,isdic13) - rtdic13(k)*dprca
@@ -1115,14 +1116,15 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
          uno3 = wcdeni*twodt/no3_in(k)
          uno3 = min(uno3, 0.999)
          uno3 = max(uno3, trcmin)
-         rno3 = max(din15_in(k),trcmin*rn15std/(1+rn15std))
+         rno3 = max(din15_in(k),trcmin*rn15std/(1.+rn15std))
      &             / max(no3_in(k)-din15_in(k),
-     &                   trcmin*rn15std/(1+rn15std))
+     &                   trcmin*rn15std/(1.+rn15std))
          rno3 = min(rno3, 2.*rn15std)
          rno3 = max(rno3, rn15std/2.)
-         bwcdeni = rno3 + eps_wcdeni*(1-uno3)/uno3*log(1-uno3)*rno3/1000.
+         bwcdeni = rno3 + eps_wcdeni*(1.-uno3)/uno3*log(1.-uno3)*rno3/
+     &        1000.
 
-         src(k,isdin15) = src(k,isdin15) - (bwcdeni/(1+bwcdeni))*wcdeni
+         src(k,isdin15) = src(k,isdin15) - (bwcdeni/(1.+bwcdeni))*wcdeni
 #   endif
 #   if defined O_npzd_alk
 ! Correct the ALK stoichiometry to account for N2 fixation
@@ -2149,14 +2151,14 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
      &      + dig_Det_B
 # endif        
 !     excretion based on growth efficiency
-        excr_P = gamma1*(1-geZ)*graz
-        excr_Z = gamma1*(1-geZ)*graz_Z
-        excr_Det = gamma1*(1-geZ)*graz_Det
+        excr_P = gamma1*(1.-geZ)*graz
+        excr_Z = gamma1*(1.-geZ)*graz_Z
+        excr_Det = gamma1*(1.-geZ)*graz_Det
 # if defined O_npzd_caco3
-        excr_C = gamma1*(1-geZ)*graz_C        
+        excr_C = gamma1*(1.-geZ)*graz_C        
 # endif
 # if defined O_kk_ballast
-       excr_Det_B = gamma1*(1-geZ)*graz_Det_B        
+       excr_Det_B = gamma1*(1.-geZ)*graz_Det_B        
 # endif
         excr = excr_P + excr_Z + excr_Det
 # if defined O_npzd_caco3
@@ -2166,14 +2168,14 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
      &       + excr_Det_B
 # endif  
 !     sloppy feeding
-        sf_P = (1-gamma1)*graz
-        sf_Z = (1-gamma1)*graz_Z
-        sf_Det = (1-gamma1)*graz_Det
+        sf_P = (1.-gamma1)*graz
+        sf_Z = (1.-gamma1)*graz_Z
+        sf_Det = (1.-gamma1)*graz_Det
 # if defined O_npzd_caco3
-        sf_C = (1-gamma1)*graz_C        
+        sf_C = (1.-gamma1)*graz_C        
 # endif
 # if defined O_kk_ballast
-        sf_Det_B = (1-gamma1)*graz_Det_B        
+        sf_Det_B = (1.-gamma1)*graz_Det_B        
 # endif
         sf = sf_P + sf_Z + sf_Det   
 # if defined O_npzd_caco3
@@ -2188,14 +2190,14 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         dig = dig + dig_D
 
 !     excretion based on growth efficiency
-        excr_D = gamma1*(1-geZ)*graz_D*(redntp/diazntp)
+        excr_D = gamma1*(1.-geZ)*graz_D*(redntp/diazntp)
         excr = excr + excr_D
 !       excrete "extra" non-Redfield diazotroph N
-        nr_excr_D = gamma1*graz_D*(1-(redntp/diazntp)) 
-     &       + (1-gamma1)*graz_D*(1-(redntp/diazntp))
+        nr_excr_D = gamma1*graz_D*(1.-(redntp/diazntp)) 
+     &       + (1.-gamma1)*graz_D*(1.-(redntp/diazntp))
 
 !     sloppy feeding
-        sf_D = (1-gamma1)*graz_D*(redntp/diazntp)
+        sf_D = (1.-gamma1)*graz_D*(redntp/diazntp)
         sf = sf + sf_D
 # endif
 # if defined O_npzd_nitrogen_15
@@ -2207,8 +2209,8 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         rno3 = biodin15/(biono3-biodin15)
         rno3 = min(rno3, 2*rn15std)
         rno3 = max(rno3, rn15std/2.)
-        bassim = rno3 + eps_assim*(1-uno3)/uno3*log(1-uno3)*rno3/1000.
-        fcassim = bassim/(1+bassim)
+        bassim = rno3 + eps_assim*(1.-uno3)/uno3*log(1.-uno3)*rno3/1000.
+        fcassim = bassim/(1.+bassim)
 
         udon = recy_don*dtbio/biodon
         udon = min(udon, 0.999)
@@ -2216,47 +2218,47 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         rdon = biodon15/(biodon-biodon15)
         rdon = min(rdon, 2*rn15std)
         rdon = max(rdon, rn15std/2.)
-        brecy = rdon + eps_recy*(1-udon)/udon*log(1-udon)*rdon/1000.
-        fcrecy = brecy/(1+brecy)
+        brecy = rdon + eps_recy*(1.-udon)/udon*log(1.-udon)*rdon/1000.
+        fcrecy = brecy/(1.+brecy)
 
         rzoop = biozoopn15/(biozoop-biozoopn15)
         rzoop = min(rzoop, 2.*rn15std)
         rzoop = max(rzoop, rn15std/2.)
         bexcr = rzoop - eps_excr*rzoop/1000.
-        fcexcr = bexcr/(1+bexcr)
+        fcexcr = bexcr/(1.+bexcr)
 
         bnfix = rn15std - eps_nfix*rn15std/1000.
-        fcnfix = bnfix/(1+bnfix)
+        fcnfix = bnfix/(1.+bnfix)
 
         rtdin15 = biodin15/biono3
-        rtdin15 = min(rtdin15, 2*rn15std/(1+rn15std))
-        rtdin15 = max(rtdin15, rn15std/(1+rn15std)/2.)
+        rtdin15 = min(rtdin15, 2*rn15std/(1.+rn15std))
+        rtdin15 = max(rtdin15, rn15std/(1.+rn15std)/2.)
 
         rtdon15 = biodon15/biodon
-        rtdon15 = min(rtdon15, 2*rn15std/(1+rn15std))
-        rtdon15 = max(rtdon15, rn15std/(1+rn15std)/2.)
+        rtdon15 = min(rtdon15, 2*rn15std/(1.+rn15std))
+        rtdon15 = max(rtdon15, rn15std/(1.+rn15std)/2.)
 
         rtphytn15 = biophytn15/biophyt
-        rtphytn15 = min(rtphytn15, 2.*rn15std/(1+rn15std))
-        rtphytn15 = max(rtphytn15, rn15std/(1+rn15std)/2.)
+        rtphytn15 = min(rtphytn15, 2.*rn15std/(1.+rn15std))
+        rtphytn15 = max(rtphytn15, rn15std/(1.+rn15std)/2.)
 
 #  if defined O_npzd_caco3
         rtcoccn15 = biococcn15/biococc
-        rtcoccn15 = min(rtcoccn15, 2.*rn15std/(1+rn15std))
-        rtcoccn15 = max(rtcoccn15, rn15std/(1+rn15std)/2.)
+        rtcoccn15 = min(rtcoccn15, 2.*rn15std/(1.+rn15std))
+        rtcoccn15 = max(rtcoccn15, rn15std/(1.+rn15std)/2.)
 #  endif        
         
         rtzoopn15 = biozoopn15/biozoop
-        rtzoopn15 = min(rtzoopn15, 2.*rn15std/(1+rn15std))
-        rtzoopn15 = max(rtzoopn15, rn15std/(1+rn15std)/2.)
+        rtzoopn15 = min(rtzoopn15, 2.*rn15std/(1.+rn15std))
+        rtzoopn15 = max(rtzoopn15, rn15std/(1.+rn15std)/2.)
 
         rtdetrn15 = biodetrn15/biodetr
-        rtdetrn15 = min(rtdetrn15, 2.*rn15std/(1+rn15std))
-        rtdetrn15 = max(rtdetrn15, rn15std/(1+rn15std)/2.)
+        rtdetrn15 = min(rtdetrn15, 2.*rn15std/(1.+rn15std))
+        rtdetrn15 = max(rtdetrn15, rn15std/(1.+rn15std)/2.)
 
         rtdiazn15 = biodiazn15/biodiaz
-        rtdiazn15 = min(rtdiazn15, 2.*rn15std/(1+rn15std))
-        rtdiazn15 = max(rtdiazn15, rn15std/(1+rn15std)/2.)
+        rtdiazn15 = min(rtdiazn15, 2.*rn15std/(1.+rn15std))
+        rtdiazn15 = max(rtdiazn15, rn15std/(1.+rn15std)/2.)
 # endif
 # if defined O_carbon_13
 
@@ -2264,42 +2266,42 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         rdic13 = min(rdic13, 2.*rc13std)
         rdic13 = max(rdic13, 0.5*rc13std)
         bc13npp = ac13b*rdic13
-        fcnpp = bc13npp/(1+bc13npp)
+        fcnpp = bc13npp/(1.+bc13npp)
         
         rtdic13 = biodic13/biodic
-        rtdic13 = min(rtdic13, 2*rc13std/(1+rc13std))
-        rtdic13 = max(rtdic13, 0.5*rc13std/(1+rc13std))
+        rtdic13 = min(rtdic13, 2*rc13std/(1.+rc13std))
+        rtdic13 = max(rtdic13, 0.5*rc13std/(1.+rc13std))
 
         rtphytc13 = biophytc13/(biophyt*redctn)
-        rtphytc13 = min(rtphytc13, 2.*rc13std/(1+rc13std))
-        rtphytc13 = max(rtphytc13, 0.5*rc13std/(1+rc13std))
+        rtphytc13 = min(rtphytc13, 2.*rc13std/(1.+rc13std))
+        rtphytc13 = max(rtphytc13, 0.5*rc13std/(1.+rc13std))
 
 #  if defined O_npzd_caco3
         rtcoccc13 = biococcc13/(biococc*redctn)
-        rtcoccc13 = min(rtcoccc13, 2.*rc13std/(1+rc13std))
-        rtcoccc13 = max(rtcoccc13, 0.5*rc13std/(1+rc13std))
+        rtcoccc13 = min(rtcoccc13, 2.*rc13std/(1.+rc13std))
+        rtcoccc13 = max(rtcoccc13, 0.5*rc13std/(1.+rc13std))
 
         rtcaco3c13 = biocaco3c13/biocaco3
-        rtcaco3c13 = min(rtcaco3c13, 2.*rc13std/(1+rc13std))
-        rtcaco3c13 = max(rtcaco3c13, 0.5*rc13std/(1+rc13std))
+        rtcaco3c13 = min(rtcaco3c13, 2.*rc13std/(1.+rc13std))
+        rtcaco3c13 = max(rtcaco3c13, 0.5*rc13std/(1.+rc13std))
 
 #  endif        
         rtzoopc13 = biozoopc13/(biozoop*redctn)
-        rtzoopc13 = min(rtzoopc13, 2.*rc13std/(1+rc13std))
-        rtzoopc13 = max(rtzoopc13, 0.5*rc13std/(1+rc13std))
+        rtzoopc13 = min(rtzoopc13, 2.*rc13std/(1.+rc13std))
+        rtzoopc13 = max(rtzoopc13, 0.5*rc13std/(1.+rc13std))
 
         rtdetrc13 = biodetrc13/(biodetr*redctn)
-        rtdetrc13 = min(rtdetrc13, 2.*rc13std/(1+rc13std))
-        rtdetrc13 = max(rtdetrc13, 0.5*rc13std/(1+rc13std))
+        rtdetrc13 = min(rtdetrc13, 2.*rc13std/(1.+rc13std))
+        rtdetrc13 = max(rtdetrc13, 0.5*rc13std/(1.+rc13std))
 
 #  if defined O_npzd_nitrogen
         rtdoc13 = biodoc13/(biodon*redctn)
-        rtdoc13 = min(rtdoc13, 2*rc13std/(1+rc13std))
-        rtdoc13 = max(rtdoc13, 0.5*rc13std/(1+rc13std))
+        rtdoc13 = min(rtdoc13, 2*rc13std/(1.+rc13std))
+        rtdoc13 = max(rtdoc13, 0.5*rc13std/(1.+rc13std))
 
         rtdiazc13 = biodiazc13/(biodiaz*redctn)
-        rtdiazc13 = min(rtdiazc13, 2.*rc13std/(1+rc13std))
-        rtdiazc13 = max(rtdiazc13, 0.5*rc13std/(1+rc13std))
+        rtdiazc13 = min(rtdiazc13, 2.*rc13std/(1.+rc13std))
+        rtdiazc13 = max(rtdiazc13, 0.5*rc13std/(1.+rc13std))
 
 #  endif        
 # endif
@@ -2450,7 +2452,7 @@ c     Andreas put dissl in bracket
 #  if defined O_npzd_nitrogen
         biodfe = biodfe + dtbio*(rfeton*(excr + (1.-dfrt)*morpt 
      &            - npp + morpt_D - npp_D + recy_don + nr_excr_D 
-     &            + morp_D*(1-(redntp/diazntp))) - feorgads 
+     &            + morp_D*(1.-(redntp/diazntp))) - feorgads 
      &            + remife - fecol
 #   if defined O_npzd_caco3
      &            + rfeton*((1.-dfrt)*morpt_C - npp_C)
@@ -2491,7 +2493,7 @@ c     Andreas put dissl in bracket
      &       + rtcoccn15*(1.-dfrt)*morpt_C - fcassim*npp_C
 #  endif        
      &       + fcexcr*excr + rtdiazn15*morpt_D + rtdiazn15*nr_excr_D 
-     &       + rtdiazn15*morp_D*(1-(redntp/diazntp)) + rtdetrn15*remi 
+     &       + rtdiazn15*morp_D*(1.-(redntp/diazntp)) + rtdetrn15*remi 
      &       + fcrecy*recy_don - fcassim*npp - fcassim*no3upt_D)
 
         biodon15 = biodon15 + dtbio*(dfr*rtphytn15*morp 
@@ -2531,7 +2533,7 @@ c     Andreas put dissl in bracket
 #  if defined O_npzd_nitrogen
         biodic13 = biodic13 + dtbio*redctn*(rtphytc13*(1.-dfrt)*morpt 
      &       + rtzoopc13*excr + rtdiazc13*morpt_D + rtdiazc13*nr_excr_D 
-     &       + rtdiazc13*morp_D*(1-(redntp/diazntp)) + rtdetrc13*remi 
+     &       + rtdiazc13*morp_D*(1.-(redntp/diazntp)) + rtdetrc13*remi 
 #   if defined O_npzd_caco3
      &       + rtcoccc13*(1.-dfrt)*morpt_C - fcnpp*npp_C
 #   endif        

@@ -47,6 +47,9 @@
       include "csbc.h"
       include "scalar.h"
       include "veg.h"
+# if defined O_carbon_14_coupled
+      include "npzd.h"
+# endif
       real rveg(imt,jmt)
 # if defined O_embm_annual
       real cosz(imt,jmt)
@@ -114,7 +117,7 @@
 # if defined O_carbon_14_coupled
 
 !     calculate c14ccn from dc14ccn and co2ccn
-      c14ccn = (1 + dc14ccn*0.001)*rstd*co2ccn
+      c14ccn = (1 + dc14ccn*0.001)*rc14std*co2ccn
 # endif
 
 !     calculate atmospheric surface area

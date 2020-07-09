@@ -20,7 +20,7 @@
 
       integer k, j, js, je, jrow, joff, i, is, ie, nc, kl, n
 
-      real dens, tq, sq, drodt, drods, drhodt, drhods, ddensdtdt
+      real dens, tq, sq, drhodt, drhods, ddensdtdt
       real ddensdtds, ddensdsds, cont, tr, trs, r1, dr, dtcbfdzw
 
       include "size.h"
@@ -38,7 +38,6 @@
       include "accel.h"
       include "scalar.h"
       include "state.h"
-      include "dens.h"
 
       real tr(imt,km,jmw,nt), trs(imt,km,jmw,nt)
 

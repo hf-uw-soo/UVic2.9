@@ -1137,7 +1137,7 @@ c        edr(2:imtm1,2:jmtm1) = tmpij(1:imtm2,1:jmtm2)
 
       logical exists
 
-      real dens, drodt, drods, p1, c100, c1e3, p001, p035, ucksum
+      real dens, p1, c100, c1e3, p001, p035, ucksum
       real vcksum, tcksum, scksum, theta0, tq, sq, s, d, tins, tinsit
       real checksum, C2K, jdi
 # if defined O_gthflx
@@ -1157,7 +1157,6 @@ c        edr(2:imtm1,2:jmtm1) = tmpij(1:imtm2,1:jmtm2)
 # if defined O_tai_slh
 #include "diag.h"
 #include "state.h"
-#include "dens.h"
 # endif
 # if defined O_matrix
 #include "matrix.h"

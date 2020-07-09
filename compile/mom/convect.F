@@ -152,7 +152,7 @@
 
       logical chk_la, chk_lb
 
-      real rl, ru, tmx(3), tsm(3), zsm, dens, tq, sq, drodt, drods
+      real rl, ru, tmx(3), tsm(3), zsm, dens, tq, sq
       real drhodt, drhods, ddensdtdt, ddensdtds, ddensdsds
 
       include "size.h"
@@ -167,7 +167,6 @@
       include "diaga.h"
 #  endif
       include "state.h"
-      include "dens.h"
 
       integer kmt(imt,jmt)
 

@@ -39,7 +39,7 @@
 
       integer k, j, js, je, i, is, ie, ind, l
 
-      real dens, tq, sq, drodt, drods
+      real dens, tq, sq
 
       include "size.h"
       include "param.h"
@@ -48,8 +48,6 @@
       include "state.h"
 
       real t(imt,km,jmw), s(imt,km,jmw), rho(imt,km,jsmw:jmw)
-
-      include "dens.h"
 
       do j=js,je
         do k=1,km
@@ -146,7 +144,7 @@
 
       integer j, js, je, i, is, ie, kr, k
 
-      real dens, tq, sq, drodt, drods
+      real dens, tq, sq
 
       include "size.h"
       include "param.h"
@@ -155,8 +153,6 @@
       include "state.h"
 
       real t(imt,km,jmw), s(imt,km,jmw), rho(imt,km,jsmw:jmw)
-
-      include "dens.h"
 
       do j=js,je
         do k=1,km

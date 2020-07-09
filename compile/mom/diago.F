@@ -1926,7 +1926,7 @@
 
       integer i, j, k, ib(10), ic(10), m, n
 
-      real dens, tq, sq, drodt, drods, drhodt, drhods, ddensdtdt
+      real dens, tq, sq, drhodt, drhods, ddensdtdt
       real ddensdtds, ddensdsds, rntatio, rnv_otsf, rnt_slh, tarea
       real cstdyt, area, s, tins, tinsit, dins, sum, d, tmp, tmp1, tmp2
 
@@ -1951,7 +1951,6 @@
       include "sed.h"
 # endif
       include "state.h"
-      include "dens.h"
 
 # if defined O_tai_otsf
       real otsf(km)

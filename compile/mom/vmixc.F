@@ -44,7 +44,9 @@
 
       real temp(imt,km,jsmw:jmw)
 # endif
-
+# if defined O_tidal_kv && defined O_isopycmix
+      real drodzb
+# endif
 !-----------------------------------------------------------------------
 !     bail out if starting row exceeds ending row
 !-----------------------------------------------------------------------
@@ -89,10 +91,11 @@ c          q2=0.5
 !           (where K33 and diff_cbt = kappa_h are defined). Note that
 !           N2 is not guaranteed to be positive. If instability occurs,
 !           convective adjustment will eliminate it.
-!           drodzb is defined in isopyc.h
 
+            drodzb = alphai(i,k,j)*ddzt(i,k,j,1) +
+     &           betai(i,k,j)*ddzt(i,k,j,2)
 !           ZN2 is defined on T-cell bottom (zw pt)
-            ZN2 = max(-gravrho0r*drodzb(i,k,j,0),1e-8)
+            ZN2 = max(-gravrho0r*drodzb,1e-8)
 
 !           subgrid-scale scheme: sum over all levels below k
             edr = 0.

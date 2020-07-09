@@ -113,29 +113,10 @@
 
 # endif  
 
-      real drodxe, drodze, drodyn, drodzn, drodxb, drodyb, drodzb
+!     statement functions
+# if defined O_full_tensor
       real drodye, drodxn
 
-!     statement functions
-
-      drodxe(i,k,j,ip) =    alphai(i+ip,k,j)*ddxt(i,k,j,1) +
-     &                      betai(i+ip,k,j)*ddxt(i,k,j,2)
-      drodze(i,k,j,ip,kr) = alphai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,1) +
-     &                      betai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,2)
-
-      drodyn(i,k,j,jq) =    alphai(i,k,j+jq)*ddyt(i,k,j,1) +
-     &                      betai(i,k,j+jq)*ddyt(i,k,j,2)
-      drodzn(i,k,j,jq,kr) = alphai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,1) +
-     &                      betai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,2)
-
-      drodxb(i,k,j,ip,kr) = alphai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,1) +
-     &                      betai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,2)
-      drodyb(i,k,j,jq,kr) = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,1) +
-     &                      betai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,2)
-      drodzb(i,k,j,kr) =    alphai(i,k+kr,j)*ddzt(i,k,j,1) +
-     &                      betai(i,k+kr,j)*ddzt(i,k,j,2)
-
-# if defined O_full_tensor
       drodye(i,k,j,ip,jq) = alphai(i+ip,k,j)*ddyt(i+ip,k,j-1+jq,1) +
      &                      betai(i+ip,k,j)*ddyt(i+ip,k,j-1+jq,2)
       drodxn(i,k,j,ip,jq) = alphai(i,k,j+jq)*ddxt(i-1+ip,k,j+jq,1) +

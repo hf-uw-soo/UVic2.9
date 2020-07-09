@@ -28,8 +28,7 @@
       parameter (fe_n = 14)
 
       real time
-      real t_i, t_j, dz_t2r, dz_tr, dz_wtr, dx_t2r, dx_tr, dy_t2r
-      real dy_tr, adv_tx, adv_ty, adv_tz, adv_txiso, adv_tyiso
+      real adv_tx, adv_ty, adv_tz, adv_txiso, adv_tyiso
       real adv_tziso, diff_tx, diff_ty, diff_tz, zmax, cont, drho
       real drhom1, wt, ahbi_cstr, ahbi_csu_dyur, gamma, fy, fyz
       real fe_dy, fe_conc, fe_x(fe_n), fe_y(fe_n), bctz
@@ -37,6 +36,17 @@
       real expofe, impofe, feorgads, remife, thetamax, deffe, fecol
       real thetachl, chl, chl_D, feprime, fesed, bfe, sgb, thetamax_C
       real deffe_C
+
+! hf: safeguard against negative values - minimum concentrations
+!     passed into mobi_tracer
+!     note that npzd.h (possibly included below) defines a different
+!     value for parameter trcmin
+      real trc_min
+      parameter (trc_min = 1.e-20)
+! hf: safeguard against huge values - note that concentrations are
+!     in mol/m3!
+      real trc_max
+      parameter (trc_max = 4.)
 
 #include "size.h"
 #include "param.h"
@@ -131,7 +141,6 @@
 # if defined O_isopycmix
 #include "isopyc.h"
 # endif
-#include "fdift.h"
 
 # if defined O_carbon_fnpzd
 !-----------------------------------------------------------------------
@@ -397,6 +406,12 @@
             tnpzd(:,imobicaco3c13) = t(i,:,j,icaco3c13,taum1) 
 #   endif            
 #  endif
+! hf: first safeguard against negative tracer concentrations
+            where (tnpzd .lt. trc_min)
+               tnpzd = trc_min
+            else where (tnpzd .gt. trc_max)
+               tnpzd = trc_max
+            end where
 !        set other input variables
             t_in(:) = t(i,:,j,itemp,taum1) !degree Celsius
             po4_in(:) = t(i,:,j,ipo4,taum1)
@@ -423,6 +438,31 @@
 #   endif
 #  endif
             sgb_in(:) = sg_bathy(i,j,:)
+! hf: second safeguard against negative tracer concentrations
+            where (po4_in .lt. trc_min)
+               po4_in = trc_min
+            else where (po4_in .gt. trc_max)
+               po4_in = trc_max
+            end where
+#  if defined O_npzd_o2
+            where (o2_in .lt. trc_min)
+               o2_in = trc_min
+            else where (o2_in .gt. trc_max)
+               o2_in = trc_max
+            end where
+#  endif
+#  if defined O_carbon_13 || defined O_npzd_caco3
+            where (dic_in .lt. trc_min)
+               dic_in = trc_min
+            else where (dic_in .gt. trc_max)
+               dic_in = trc_max
+            end where
+            where (alk_in .lt. trc_min)
+               alk_in = trc_min
+            else where (alk_in .gt. trc_max)
+               alk_in = trc_max
+            end where
+#  endif
 !  end input
             call mobi_driver(
      &                 kmt(i,jrow), c2dtts, rctheta, dayfrac, swr, tnpzd
@@ -1256,8 +1296,7 @@ C SPK: this used to be twodt(1) but in offline mode this is not set anywhere
       integer i, k, j, ip, kr, jq, n, jp, jrow, js, je, joff, is, ie
       integer mask, m
 
-      real t_i, t_j, dz_t2r, dz_tr, dz_wtr, dx_t2r, dx_tr, dy_t2r
-      real dy_tr, adv_tx, adv_ty, adv_tz, adv_txiso, adv_tyiso
+      real adv_tx, adv_ty, adv_tz, adv_txiso, adv_tyiso
       real adv_tziso, diff_tx, diff_ty, diff_tz, dtdx, dtdy, dtdz
       real r2dt, cosdyt, fx, darea, boxar, rtwodt, sumdx, delx
       real sumdxr, dxdy, dxdydz
@@ -1300,7 +1339,6 @@ C SPK: this used to be twodt(1) but in offline mode this is not set anywhere
 # if defined O_isopycmix
 #include "isopyc.h"
 # endif
-#include "fdift.h"
 
 # if defined O_save_mixing_coeff
 

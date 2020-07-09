@@ -106,7 +106,11 @@ c          q2=0.5
      &                   + qk1*edrk1(i,k1,jrow) + qo1*edro1(i,k1,jrow))
      &                   *exp(hab*zetar)/(1-exp(-zetar*zw(k1)))
             enddo
+            if (abs(ogamma*edr) < 1.e+30) then
             zkappa = ogamma*edr/ZN2
+            else
+               zkappa = 0.0
+            endif
 
 ! Andreas: high mixing in Southern Ocean below 500 m as in observations
 c            zkappa = max(zkappa,tanh((zw(k)-50000.)/10000)*

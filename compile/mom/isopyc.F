@@ -15,7 +15,7 @@
 !     input:
 !       error  = logical to signal problems
 !       am     = background mixing coeff for momentum
-!       ah     = horizontaal mixing coeff for tracers
+!       ah     = horizontal mixing coeff for tracers
 !       slmx   = max slope of isopycnals
 !       ahisop = isopycnal tracer diffusivity(cm**2/sec)
 !       athkdf = isopycnal thickness diffusivity (cm**2/sec)
@@ -29,7 +29,7 @@
       character(120) :: fname, new_file_name
       integer i, k, j, ip, kr, jq, io, i_delta, j_delta, k_delta, jrow
       integer iou, n, ib(10), ic(10)
-      logical exists, inqvardef, error, debug
+      logical exists, inqvardef, error
       real slmx, s_dm, ah, am, ft, delta1, delta2
 
       include "size.h"
@@ -370,7 +370,7 @@ c         Andreas read this in since it is constant in time
 
       integer i, k, j, ip, kr, jq, js, je, is, ie, n, kp1, jrow, joff
 
-      real dens, tq, sq, drodt, drods, tprime, sprime
+      real tprime, sprime
 
       include "size.h"
       include "param.h"
@@ -382,7 +382,6 @@ c         Andreas read this in since it is constant in time
       include "mw.h"
       include "state.h"
       include "isopyc.h"
-      include "dens.h"
 
 !-----------------------------------------------------------------------
 !     alpha and beta at centers of T cells
@@ -393,8 +392,12 @@ c         Andreas read this in since it is constant in time
           do i=is,ie
             tprime = t(i,k,j,1,taum1)-to(k)
             sprime = t(i,k,j,2,taum1)-so(k)
-            alphai(i,k,j) = drodt (tprime, sprime, k)
-            betai(i,k,j)  = drods (tprime, sprime, k)
+            alphai(i,k,j) = c(k,1) + (c(k,4) + c(k,7)*sprime)*sprime
+     &           + (2.0*c(k,3) + 2.0*c(k,8)*sprime
+     &           + 3.0*c(k,6)*tprime)*tprime
+            betai(i,k,j)  = (c(k,4) + 2.0*c(k,7)*sprime
+     &           + c(k,8)*tprime)*tprime
+     &           + c(k,2) + (2.0*c(k,5) + 3.0*c(k,9)*sprime)*sprime
           enddo
         enddo
         call setbcx (alphai(1,1,j), imt, km)
@@ -567,6 +570,7 @@ c         Andreas read this in since it is constant in time
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
 
       real sc, dzt4r, ai0, sumz, sxe, sumy, facty 
+      real drodxe, drodze
 
       include "size.h"
       include "param.h"
@@ -605,7 +609,11 @@ c         Andreas read this in since it is constant in time
             sumz = c0
             do kr=0,1
               do ip=0,1
-                sxe = abs(drodxe(i,k,j,ip)/(drodze(i,k,j,ip,kr)+epsln))
+                drodxe = alphai(i+ip,k,j)*ddxt(i,k,j,1) +
+     &                betai(i+ip,k,j)*ddxt(i,k,j,2)
+                drodze = alphai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,1) +
+     &               betai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,2)
+                sxe = abs(drodxe/(drodze+epsln))
                 if (delta_iso .lt. p5 .and.
      &              (s_minus .lt. sxe .and. sxe .lt. s_plus)) then
                   Ai_ez(i,k,j,ip,kr) = Ai0*tmask(i,k,j)*tmask(i+1,k,j)
@@ -614,9 +622,9 @@ c         Andreas read this in since it is constant in time
                   Ai_ez(i,k,j,ip,kr) = Ai0*tmask(i,k,j)*tmask(i+1,k,j)
                 endif
                 sumz = sumz + dzw(k-1+kr)*Ai_ez(i,k,j,ip,kr)
-     &               *drodze(i,k,j,ip,kr)**2/(drodxe(i,k,j,ip)**2
+     &               *drodze**2/(drodxe**2
      &          +  p5*(drodye(i,k,j,ip,0)**2 + drodye(i,k,j,ip,1)**2)
-     &               + drodze(i,k,j,ip,kr)**2 + epsln)
+     &               + drodze**2 + epsln)
               enddo
             enddo
 
@@ -624,8 +632,10 @@ c         Andreas read this in since it is constant in time
             do jq=0,1
               facty = csu(jrow-1+jq)*dyu(jrow-1+jq)
               do ip=0,1
+                drodxe = alphai(i+ip,k,j)*ddxt(i,k,j,1) +
+     &                betai(i+ip,k,j)*ddxt(i,k,j,2)
                 sumy = sumy + facty*Ai0*tmask(i,k,j)*tmask(i+1,k,j)
-     &               *drodye(i,k,j,ip,jq)**2/(drodxe(i,k,j,ip)**2
+     &               *drodye(i,k,j,ip,jq)**2/(drodxe**2
      &               + drodye(i,k,j,ip,jq)**2 + epsln
      &          +  p5*(drodze(i,k,j,ip,0)**2 + drodze(i,k,j,ip,1)**2))
               enddo
@@ -635,7 +645,11 @@ c         Andreas read this in since it is constant in time
             sumz = c0
             do kr=0,1
               do ip=0,1
-                sxe = abs(drodxe(i,k,j,ip)/(drodze(i,k,j,ip,kr)+epsln))
+                 drodxe = alphai(i+ip,k,j)*ddxt(i,k,j,1) +
+     &                betai(i+ip,k,j)*ddxt(i,k,j,2) 
+                 drodze = alphai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,1) +
+     &                betai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,2)
+                 sxe = abs(drodxe/(drodze+epsln))
 #   if defined O_dm_taper
                 Ai_ez(i,k,j,ip,kr) = Ai0*tmask(i,k,j)*tmask(i+1,k,j)
      &                               *p5*(c1-tanh((sxe-del_dm)*s_dmr))
@@ -675,6 +689,7 @@ c         Andreas read this in since it is constant in time
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
 
       real sc, dzt4r, ai0, sumz, syn, sumx
+      real drodyn, drodzn, drodzn0, drodzn1
 
       include "size.h"
       include "param.h"
@@ -712,7 +727,11 @@ c         Andreas read this in since it is constant in time
             sumz = c0
             do kr=0,1
               do jq=0,1
-                syn=abs(drodyn(i,k,j,jq)/(drodzn(i,k,j,jq,kr)+epsln))
+                drodyn = alphai(i,k,j+jq)*ddyt(i,k,j,1) +
+     &                betai(i,k,j+jq)*ddyt(i,k,j,2)
+                drodzn = alphai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,1) +
+     &               betai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,2)
+                syn=abs(drodyn/(drodzn+epsln))
                 if (delta_iso .lt. p5 .and.
      &            (s_minus .lt. syn .and. syn .lt. s_plus)) then
                   Ai_nz(i,k,j,jq,kr) = Ai0*tmask(i,k,j)*tmask(i,k,j+1)
@@ -721,19 +740,25 @@ c         Andreas read this in since it is constant in time
                   Ai_nz(i,k,j,jq,kr) = Ai0*tmask(i,k,j)*tmask(i,k,j+1)
                 endif
                 sumz = sumz + dzw(k-1+kr)*Ai_nz(i,k,j,jq,kr)
-     &               *drodzn(i,k,j,jq,kr)**2/(
+     &               *drodzn**2/(
      &          +  p5*(drodxn(i,k,j,0,jq)**2 + drodxn(i,k,j,1,jq)**2)
-     &          + drodyn(i,k,j,jq)**2 + drodzn(i,k,j,jq,kr)**2 + epsln)
+     &          + drodyn**2 + drodzn**2 + epsln)
               enddo
             enddo
 
             sumx = c0
             do ip=0,1
               do jq=0,1
+                  drodyn = alphai(i,k,j+jq)*ddyt(i,k,j,1) +
+     &                betai(i,k,j+jq)*ddyt(i,k,j,2)
+                  drodzn0 = alphai(i,k,j+jq)*ddzt(i,k-1,j+jq,1) +
+     &                 betai(i,k,j+jq)*ddzt(i,k-1,j+jq,2)
+                  drodzn1 = alphai(i,k,j+jq)*ddzt(i,k,j+jq,1) +
+     &                 betai(i,k,j+jq)*ddzt(i,k,j+jq,2)
                   sumx =sumx+dxu(i-1+ip)*Ai0*tmask(i,k,j)*tmask(i,k,j+1)
      &               *drodxn(i,k,j,ip,jq)**2/(drodxn(i,k,j,ip,jq)**2
-     &               + drodyn(i,k,j,jq)**2 + epsln
-     &       +    p5*(drodzn(i,k,j,jq,0)**2 + drodzn(i,k,j,jq,1)**2))
+     &               + drodyn**2 + epsln
+     &       +    p5*(drodzn0**2 + drodzn1**2))
               enddo
             enddo
             K22(i,k,j) = dzt4r*sumz + p25*dxtr(i)*sumx
@@ -741,7 +766,11 @@ c         Andreas read this in since it is constant in time
             sumz = c0
             do kr=0,1
               do jq=0,1
-                syn =abs(drodyn(i,k,j,jq)/(drodzn(i,k,j,jq,kr)+epsln))
+                 drodyn = alphai(i,k,j+jq)*ddyt(i,k,j,1) +
+     &                betai(i,k,j+jq)*ddyt(i,k,j,2)
+                 drodzn = alphai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,1) +
+     &                betai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,2)
+                 syn = abs(drodyn/(drodzn+epsln))
 #   if defined O_dm_taper
                 Ai_nz(i,k,j,jq,kr) = Ai0*tmask(i,k,j)*tmask(i,k,j+1)
      &                               *p5*(c1-tanh((syn-del_dm)*s_dmr))
@@ -782,6 +811,8 @@ c         Andreas read this in since it is constant in time
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
 
       real sc, kp1, ai0, sumx, sxb, sumy, facty, syb
+      real drodxb, drodxb0, drodxb1
+      real drodyb, drodyb0, drodyb1, drodzb
 
       include "size.h"
       include "param.h"
@@ -818,7 +849,11 @@ c         Andreas read this in since it is constant in time
             sumx = c0
             do ip=0,1
               do kr=0,1
-                sxb = abs(drodxb(i,k,j,ip,kr)/(drodzb(i,k,j,kr)+epsln))
+                drodxb = alphai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,2)
+                drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &               betai(i,k+kr,j)*ddzt(i,k,j,2)
+                sxb = abs(drodxb/(drodzb + epsln))
                 if (delta_iso .lt. p5 .and.
      &              (s_minus .lt. sxb .and. sxb .lt. s_plus)) then
                   Ai_bx(i,k,j,ip,kr)  =  Ai0*tmask(i,k+1,j)
@@ -826,10 +861,14 @@ c         Andreas read this in since it is constant in time
                 else
                   Ai_bx(i,k,j,ip,kr)  =  Ai0*tmask(i,k+1,j)
                 endif
+                drodyb0 = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1,1) +
+     &               betai(i,k+kr,j)*ddyt(i,k+kr,j-1,2)
+                drodyb1 = alphai(i,k+kr,j)*ddyt(i,k+kr,j,1) +
+     &               betai(i,k+kr,j)*ddyt(i,k+kr,j,2)
                 sumx = sumx + dxu(i-1+ip)*Ai_bx(i,k,j,ip,kr)
-     &            *drodxb(i,k,j,ip,kr)**2/(drodxb(i,k,j,ip,kr)**2
-     &       +  p5*(drodyb(i,k,j,0,kr)**2 + drodyb(i,k,j,1,kr)**2)
-     &               + drodzb(i,k,j,kr)**2 + epsln)
+     &            *drodxb**2/(drodxb**2
+     &       +  p5*(drodyb0**2 + drodyb1**2)
+     &               + drodzb**2 + epsln)
               enddo
             enddo
 
@@ -840,7 +879,15 @@ c         Andreas read this in since it is constant in time
             do jq=0,1
               facty = csu(jrow-1+jq)*dyu(jrow-1+jq)
               do kr=0,1
-                syb = abs(drodyb(i,k,j,jq,kr)/(drodzb(i,k,j,kr)+epsln))
+                drodxb0 = alphai(i,k+kr,j)*ddxt(i-1,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddxt(i-1,k+kr,j,2)
+                drodxb1 = alphai(i,k+kr,j)*ddxt(i,k+kr,j,1) +
+     &               betai(i,k+kr,j)*ddxt(i,k+kr,j,2)
+                drodyb = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,1) +
+     &               betai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,2)
+                drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &               betai(i,k+kr,j)*ddzt(i,k,j,2)
+                syb = abs(drodyb/(drodzb+epsln))
                 if (delta_iso .lt. p5 .and.
      &              (s_minus .lt. syb .and. syb .lt. s_plus)) then
                   Ai_by(i,k,j,jq,kr)  =  Ai0*tmask(i,k+1,j)
@@ -849,10 +896,10 @@ c         Andreas read this in since it is constant in time
                   Ai_by(i,k,j,jq,kr)  =  Ai0*tmask(i,k+1,j)
                 endif
                 sumy = sumy + facty*Ai_by(i,k,j,jq,kr)
-     &            *drodyb(i,k,j,jq,kr)**2/(
-     &           p5*(drodxb(i,k,j,0,kr)**2 + drodxb(i,k,j,1,kr)**2)
-     &            + drodyb(i,k,j,jq,kr)**2
-     &            + drodzb(i,k,j,kr)**2 + epsln)
+     &            *drodyb**2/(
+     &           p5*(drodxb0**2 + drodxb1**2)
+     &            + drodyb**2
+     &            + drodzb**2 + epsln)
               enddo
             enddo
 
@@ -864,7 +911,11 @@ c         Andreas read this in since it is constant in time
             sumx = c0
             do ip=0,1
               do kr=0,1
-                sxb = abs(drodxb(i,k,j,ip,kr)/(drodzb(i,k,j,kr)+epsln))
+                 drodxb = alphai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,2)
+                 drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &                betai(i,k+kr,j)*ddzt(i,k,j,2)
+                 sxb = abs(drodxb/(drodzb + epsln))
 #   if defined O_dm_taper
                 Ai_bx(i,k,j,ip,kr) = Ai0*tmask(i,k+1,j)
      &                               *p5*(c1-tanh((sxb-del_dm)*s_dmr))
@@ -886,7 +937,15 @@ c         Andreas read this in since it is constant in time
             do jq=0,1
               facty = csu(jrow-1+jq)*dyu(jrow-1+jq)
               do kr=0,1
-                syb = abs(drodyb(i,k,j,jq,kr)/(drodzb(i,k,j,kr)+epsln))
+                 drodyb = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,1) +
+     &                betai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,2)
+                 drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &                betai(i,k+kr,j)*ddzt(i,k,j,2)
+!                 if (drodzb + epsln .eq. 0.0) then
+!                    syb = 1.e10 * abs(drodyb)
+!                 else
+                 syb = abs(drodyb/(drodzb + epsln))
+!                 endif
 #   if defined O_dm_taper
                 Ai_by(i,k,j,jq,kr) = Ai0*tmask(i,k+1,j)
      &                               *p5*(c1-tanh((syb-del_dm)*s_dmr))
@@ -933,6 +992,10 @@ c         Andreas read this in since it is constant in time
 
       real dzt4r, sumz, flux_x, ai0, sumy, facty, csu_dzt4r, flux_y
       real sumx, ck
+      real drodxe, drodze, drodze0, drodze1, drodyn
+      real drodzn, drodzn0, drodzn1
+      real drodxb, drodxb0, drodxb1
+      real drodyb, drodzb
 
       include "size.h"
       include "param.h"
@@ -960,15 +1023,19 @@ c         Andreas read this in since it is constant in time
               km1kr = max(k-1+kr,1)
               kpkr = min(k+kr,km)
               do ip=0,1
+                 drodxe = alphai(i+ip,k,j)*ddxt(i,k,j,1) +
+     &                betai(i+ip,k,j)*ddxt(i,k,j,2)
+                 drodze = alphai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,1) +
+     &                betai(i+ip,k,j)*ddzt(i+ip,k-1+kr,j,2)
                 sumz = sumz - Ai_ez(i,k,j,ip,kr)
      &                *(t(i+ip,km1kr,j,n,taum1)-t(i+ip,kpkr,j,n,taum1))
-     &                *drodxe(i,k,j,ip)
+     &                *drodxe
 #  if defined O_full_tensor
-     &                *drodze(i,k,j,ip,kr)/(drodxe(i,k,j,ip)**2
+     &                *drodze/(drodxe**2
      &          +  p5*(drodye(i,k,j,ip,0)**2 + drodye(i,k,j,ip,1)**2)
-     &               + drodze(i,k,j,ip,kr)**2 + epsln)
+     &               + drodze**2 + epsln)
 #  else
-     &               /(drodze(i,k,j,ip,kr) + epsln)
+     &               /(drodze + epsln)
 #  endif
               enddo
             enddo
@@ -984,11 +1051,17 @@ c         Andreas read this in since it is constant in time
             do jq=0,1
               facty = csu(jrow-1+jq)
               do ip=0,1
+                drodxe = alphai(i+ip,k,j)*ddxt(i,k,j,1) +
+     &                betai(i+ip,k,j)*ddxt(i,k,j,2)
+                drodze0 = alphai(i+ip,k,j)*ddzt(i+ip,k-1,j,1) +
+     &               betai(i+ip,k,j)*ddzt(i+ip,k-1,j,2)  
+                drodze1 = alphai(i+ip,k,j)*ddzt(i+ip,k,j,1) +
+     &               betai(i+ip,k,j)*ddzt(i+ip,k,j,2)
                 sumy = sumy - facty*Ai0*tmask(i,k,j)*tmask(i+1,k,j)
      &       *(t(i+ip,k,j+jq,n,taum1)-t(i+ip,k,j-1+jq,n,taum1))
-     &       *drodye(i,k,j,ip,jq)*drodxe(i,k,j,ip)/(drodxe(i,k,j,ip)**2
+     &       *drodye(i,k,j,ip,jq)*drodxe/(drodxe**2
      &               + drodye(i,k,j,ip,jq)**2 + epsln
-     &          +  p5*(drodze(i,k,j,ip,0)**2 + drodze(i,k,j,ip,1)**2))
+     &          +  p5*(drodze0**2 + drodze1**2))
               enddo
             enddo
             flux_x = flux_x + p25*cstdytr(jrow)*sumy
@@ -1015,15 +1088,21 @@ c         Andreas read this in since it is constant in time
               km1kr = max(k-1+kr,1)
               kpkr = min(k+kr,km)
               do jq=0,1
+                 drodyn = alphai(i,k,j+jq)*ddyt(i,k,j,1) +
+     &                betai(i,k,j+jq)*ddyt(i,k,j,2)
+                 drodzn = alphai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,1) +
+     &                betai(i,k,j+jq)*ddzt(i,k-1+kr,j+jq,2)
                 sumz = sumz - Ai_nz(i,k,j,jq,kr)
      &                 *(t(i,km1kr,j+jq,n,taum1)-t(i,kpkr,j+jq,n,taum1))
-     &                 *drodyn(i,k,j,jq)
+     &                 *drodyn
 #  if defined O_full_tensor
-     &                 *drodzn(i,k,j,jq,kr)/(
-     &          +  p5*(drodxn(i,k,j,0,jq)**2 + drodxn(i,k,j,1,jq)**2)
-     &          + drodyn(i,k,j,jq)**2 + drodzn(i,k,j,jq,kr)**2 + epsln)
+     &                 *drodzn/(
+     &                 +  p5*(drodxn(i,k,j,0,jq)**2 + 
+     &                   drodxn(i,k,j,1,jq)**2)
+     &                 + drodyn**2 + 
+     &                   drodzn**2 + epsln)
 #  else
-     &               /(drodzn(i,k,j,jq,kr) + epsln)
+     &                 /(drodzn + epsln)
 #  endif
               enddo
             enddo
@@ -1034,12 +1113,18 @@ c         Andreas read this in since it is constant in time
             sumx = c0
             do ip=0,1
               do jq=0,1
+                drodyn = alphai(i,k,j+jq)*ddyt(i,k,j,1) +
+     &                betai(i,k,j+jq)*ddyt(i,k,j,2) 
+                drodzn0 = alphai(i,k,j+jq)*ddzt(i,k-1,j+jq,1) +
+     &               betai(i,k,j+jq)*ddzt(i,k-1,j+jq,2)
+                drodzn1 = alphai(i,k,j+jq)*ddzt(i,k,j+jq,1) +
+     &               betai(i,k,j+jq)*ddzt(i,k,j+jq,2)
                 sumx = sumx - Ai0*tmask(i,k,j)*tmask(i,k,j+1)
      &               *(t(i+ip,k,j+jq,n,taum1)-t(i-1+ip,k,j+jq,n,taum1))
      &                 *cstr(jrow+jq)
-     &               *drodxn(i,k,j,ip,jq)*drodyn(i,k,j,jq)/(
-     &             drodxn(i,k,j,ip,jq)**2 + drodyn(i,k,j,jq)**2 + epsln
-     &          +  p5*(drodzn(i,k,j,jq,0)**2 + drodzn(i,k,j,jq,1)**2))
+     &               *drodxn(i,k,j,ip,jq)*drodyn/(
+     &             drodxn(i,k,j,ip,jq)**2 + drodyn**2 + epsln
+     &          +  p5*(drodzn0**2 + drodzn1**2))
               enddo
             enddo
             flux_y = flux_y + p25*csu(jrow)*dxtr(i)*sumx
@@ -1066,33 +1151,61 @@ c         Andreas read this in since it is constant in time
             sumx = c0
             do ip=0,1
               do kr=0,1
-                sumx = sumx
-     &            - Ai_bx(i,k,j,ip,kr)*cstr(jrow)*
-     &             (t(i+ip,k+kr,j,n,taum1) - t(i-1+ip,k+kr,j,n,taum1))
-     &             *drodxb(i,k,j,ip,kr)
+                 drodxb = alphai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddxt(i-1+ip,k+kr,j,2)
+                 drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &                betai(i,k+kr,j)*ddzt(i,k,j,2)
 #  if defined O_full_tensor
-     &             *drodzb(i,k,j,kr)/(drodxb(i,k,j,ip,kr)**2
-     &       +  p5*(drodyb(i,k,j,0,kr)**2 + drodyb(i,k,j,1,kr)**2)
-     &            + drodzb(i,k,j,kr)**2 + epsln)
+                 drodyb0 = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1,1) +
+     &                betai(i,k+kr,j)*ddyt(i,k+kr,j-1,2)
+                 drodyb1 = alphai(i,k+kr,j)*ddyt(i,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddyt(i,k+kr,j,2)
+                 sumx = sumx
+     &            - Ai_bx(i,k,j,ip,kr)*cstr(jrow)*
+     &                   (t(i+ip,k+kr,j,n,taum1) - 
+     &                   t(i-1+ip,k+kr,j,n,taum1))
+     &                   *drodxb
+     &                   *drodzb/(drodxb**2
+     &                   +  p5*(drodyb0**2 
+     &                   + drodyb1**2)
+     &                   + drodzb**2 + epsln)
 #  else
-     &              /(drodzb(i,k,j,kr) + epsln)
+                 sumx = sumx
+     &                   - Ai_bx(i,k,j,ip,kr)*cstr(jrow)*
+     &                   (t(i+ip,k+kr,j,n,taum1) - 
+     &                   t(i-1+ip,k+kr,j,n,taum1))
+     &                   *drodxb
+     &                   /(drodzb + epsln)
 #  endif
               enddo
             enddo
             sumy = c0
             do jq=0,1
               do kr=0,1
+                drodxb0 = alphai(i,k+kr,j)*ddxt(i-1,k+kr,j,1) +
+     &                betai(i,k+kr,j)*ddxt(i-1,k+kr,j,2)
+                drodxb1 = alphai(i,k+kr,j)*ddxt(i,k+kr,j,1) +
+     &               betai(i,k+kr,j)*ddxt(i,k+kr,j,2)
+                drodyb = alphai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,1) +
+     &               betai(i,k+kr,j)*ddyt(i,k+kr,j-1+jq,2)
+                drodzb = alphai(i,k+kr,j)*ddzt(i,k,j,1) +
+     &               betai(i,k+kr,j)*ddzt(i,k,j,2)
+#  if defined O_full_tensor
                 sumy = sumy
      &           - Ai_by(i,k,j,jq,kr)*csu(jrow-1+jq)*
      &            (t(i,k+kr,j+jq,n,taum1)-t(i,k+kr,j-1+jq,n,taum1))
-     &               *drodyb(i,k,j,jq,kr)
-#  if defined O_full_tensor
-     &               *drodzb(i,k,j,kr)/(
-     &           p5*(drodxb(i,k,j,0,kr)**2 + drodxb(i,k,j,0,kr)**2)
-     &            + drodyb(i,k,j,jq,kr)**2
-     &            + drodzb(i,k,j,kr)**2 + epsln)
+     &               *drodyb
+     &               *drodzb/(
+     &           p5*(drodxb0**2 + drodxb1**2)
+     &            + drodyb**2
+     &            + drodzb**2 + epsln)
 #  else
-     &              /(drodzb(i,k,j,kr) + epsln)
+                sumy = sumy
+     &                      - Ai_by(i,k,j,jq,kr)*csu(jrow-1+jq)*
+     &                      (t(i,k+kr,j+jq,n,taum1)
+     &                      -t(i,k+kr,j-1+jq,n,taum1))
+     &                      *drodyb
+     &                      /(drodzb + epsln)
 #  endif
               enddo
             enddo

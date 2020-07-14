@@ -1263,6 +1263,9 @@ c         Andreas read this in since it is constant in time
 
       real sc, ath0, at, bt, stn, ab, bb, sbn, absstn, abssbn
       real ath_t, ath_b, ste, sbe, absste, abssbe
+# if defined O_KGMvar
+      real drodzb0, drodzb1
+# endif
 
       include "size.h"
       include "param.h"
@@ -1381,9 +1384,12 @@ c         Andreas read this in since it is constant in time
           do k=1,kmt(i,jrow)  ! change hard value to a calculated
            ! stratif_int = vertical integral of stratification, on T
            !   cells
-            stratif_int = stratif_int + dzw(k) *
-     &                    sqrt(coef * p5 * abs(drodzb(i,k,jrow,0)
-     &                                       + drodzb(i,k,jrow,1)))
+             drodzb0 = alphai(i,k,jrow)*ddzt(i,k,jrow,1) +
+     &            betai(i,k,jrow)*ddzt(i,k,jrow,2)
+             drodzb1 = alphai(i,k+1,jrow)*ddzt(i,k,jrow,1) +
+     &            betai(i,k+1,jrow)*ddzt(i,k,jrow,2)
+             stratif_int = stratif_int + dzw(k) *
+     &            sqrt(coef * p5 * abs(drodzb0 + drodzb1))
           enddo
           do k=1,kmt(i,jrow)
             kgm(i,k,jrow,niso) = eddy_min
@@ -1411,8 +1417,11 @@ c         Andreas read this in since it is constant in time
             endif
             
             ! Vertical gradient of density at the top face of "T" cells.
-            abs_drho_dz = p5 * abs(drodzb(i,km1,jrow,0) +
-     &                             drodzb(i,km1,jrow,1))
+            drodzb0 = alphai(i,km1,jrow)*ddzt(i,km1,jrow,1) +
+     &           betai(i,km1,jrow)*ddzt(i,km1,jrow,2)
+            drodzb1 = alphai(i,km1+1,jrow)*ddzt(i,km1,jrow,1) +
+     &           betai(i,km1+1,jrow)*ddzt(i,km1,jrow,2)
+            abs_drho_dz = p5 * abs(drodzb0 + drodzb1)
             
             ! Limit N2 > 1.e-8 / coef
             abs_drho_dz = max(1.e-8/coef, abs_drho_dz)

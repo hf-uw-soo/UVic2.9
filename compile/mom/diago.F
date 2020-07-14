@@ -375,10 +375,10 @@
         endif
       endif
 9001  format('    k','  All Regions ',9(1x,i7,5x))
-9002  format(1x,i4,10(1x,e12.6))
-9003  format('  AVG',10(1x,e12.6))
+9002  format(1x,i4,10(1x,e13.6))
+9003  format('  AVG',10(1x,e13.6))
 9004  format(/' Volume Weighted Averages for ',a12,' on ts =',i10,a33)
-9014  format(/' FLX',i1,10(1x,e12.6),/)
+9014  format(/' FLX',i1,10(1x,e13.6),/)
 # endif
 # if defined O_time_step_monitor
 
@@ -1258,7 +1258,7 @@
 8201  format (/,22x,a40,/)
 8202  format (/,22x,' Global ',/)
 8203  format (8x,'total advection',2x,'total diffusion',2x,'total')
-8204  format (2x,i3,3x,3(e12.6,5x))
+8204  format (2x,i3,3x,3(e13.6,5x))
 8205  format (/,6x,'northward transport of salt (x10**10 cm**3/sec)',/)
 # endif
 # if defined O_meridional_overturning

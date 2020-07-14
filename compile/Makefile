@@ -43,8 +43,8 @@ mom/libmom.a: mom/adv_vel.F  mom/calc_psgrad.F    mom/convect.F  \
 	mom/blmixi.F   mom/convect_brine.F  mom/diagi.F     mom/gyre.F    \
 	mom/isopyc.F  mom/mom_tavg.F  mom/odam.F      mom/setkmp.F   \
 	mom/stab.F     mom/tracer_adv_flx.F\
-	mom/cshort.h  mom/ctavg.h  mom/ctmb.h  mom/dens.h  mom/diaga.h  \
-	mom/docnam.h  mom/fdifm.h  mom/fdift.h  mom/matrix.h  mom/mw.h  \
+	mom/cshort.h  mom/ctavg.h  mom/ctmb.h  mom/diaga.h  \
+	mom/docnam.h  mom/fdifm.h  mom/matrix.h  mom/mw.h  \
 	mom/state.h  mom/tbt.h  mom/tidal_kv.h  mom/timeavgs.h  mom/xbt.h
 	cd mom; make libmom.a; cd ..
 

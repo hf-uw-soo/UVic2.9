@@ -44,7 +44,7 @@ mom/libmom.a: mom/adv_vel.F  mom/calc_psgrad.F    mom/convect.F  \
 	mom/isopyc.F  mom/mom_tavg.F  mom/odam.F      mom/setkmp.F   \
 	mom/stab.F     mom/tracer_adv_flx.F\
 	mom/cshort.h  mom/ctavg.h  mom/ctmb.h  mom/diaga.h  \
-	mom/docnam.h  mom/fdifm.h  mom/matrix.h  mom/mw.h  \
+	mom/docnam.h  mom/matrix.h  mom/mw.h  \
 	mom/state.h  mom/tbt.h  mom/tidal_kv.h  mom/timeavgs.h  mom/xbt.h
 	cd mom; make libmom.a; cd ..
 

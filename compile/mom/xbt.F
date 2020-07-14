@@ -342,7 +342,6 @@
 # if defined O_isopycmix
       include "isopyc.h"
 # endif
-      include "fdift.h"
 
       if (n .gt. nt) then
         write (stdout,*) '=> Error: n=',n,' in txbt1.F'
@@ -609,7 +608,6 @@
       include "scalar.h"
       include "xbt.h"
       include "vmixc.h"
-      include "fdifm.h"
 
       do j=js,je
         jrow = j + joff

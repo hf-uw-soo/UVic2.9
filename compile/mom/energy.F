@@ -34,7 +34,6 @@
       include "levind.h"
       include "mw.h"
       include "vmixc.h"
-      include "fdifm.h"
 
       real ext(imt,2)
 

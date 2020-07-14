@@ -26,8 +26,6 @@
       include "hmixc.h"
       include "mw.h"
       include "scalar.h"
-      include "fdift.h"
-      include "fdifm.h"
 
 !-----------------------------------------------------------------------
 !     bail out if starting row exceeds ending row

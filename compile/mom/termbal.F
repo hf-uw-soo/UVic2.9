@@ -34,7 +34,6 @@
       include "mw.h"
       include "scalar.h"
       include "vmixc.h"
-      include "fdifm.h"
 
 !-----------------------------------------------------------------------
 !     set local constants
@@ -393,7 +392,6 @@
 # if defined O_isopycmix || defined O_isneutralmix
       include "isopyc.h"
 # endif
-      include "fdift.h"
 
 !-----------------------------------------------------------------------
 !     limit the longitude indices

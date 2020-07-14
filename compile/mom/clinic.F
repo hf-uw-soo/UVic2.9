@@ -39,7 +39,6 @@
       include "scalar.h"
       include "switch.h"
       include "vmixc.h"
-      include "fdifm.h"
 
       parameter (istrt=2, iend=imt-1)
 

@@ -447,7 +447,6 @@
 #  if defined O_fct_dlm1 || !defined O_fct_dlm2
      &,         t_lo(imt,km)
 #  endif
-      include "fdift.h"
 
 !-----------------------------------------------------------------------
 !     limit the indices based on those from the argument list

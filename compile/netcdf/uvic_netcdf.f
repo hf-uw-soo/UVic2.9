@@ -870,6 +870,7 @@
       real, intent(in) :: o, s
       real dout(ln)
       real(kind=8) din(ln), offset, scale
+      real(kind=8) tmp
 
       i = nf_inq_varid (ncid, name, iv)
       if (i .ne. nf_noerr) then
@@ -884,8 +885,14 @@
       i = nf_get_att_double (ncid, iv, 'scale_factor', scale)
       i = nf_get_vara_double (ncid, iv, is(1:nd), ic(1:nd), din)
       call checkerror(i,'getvara '//name)
-      dout(1:ln) = (din(1:ln)*scale + offset)*s + o
-
+      do i = 1, ln
+         tmp = (din(i)*scale + offset)*s + o
+         if (dabs(tmp) < 1.d+38) then
+            dout(i) = real(tmp)
+         else
+            dout(i) = real(din(i)) ! missing value, unchanged
+         end if
+      end do
       return
       end
 

@@ -416,7 +416,9 @@ c      dpCO2 = pCO2 - co2*atmpres ! if not O_pCO2_bug_fix
 ! Thus Convert now from mol/kg -> mol/m^3
       co2star  = co2star/permil
       dco2star = dco2star/permil
-      CO3 = CO3/permil
+      if (abs(CO3) < 1.e+35) then
+         CO3 = CO3/permil
+      endif
 
 ! Note: pCO2 and dpCO2 are calculated in atm above.
 ! Thus convert now to uatm

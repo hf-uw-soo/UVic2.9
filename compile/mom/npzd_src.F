@@ -1689,7 +1689,13 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
       u2 = u1*f1
 !     for the following approximation ensure that u1 < 20
       phi1 = log(u1+sqrt(1.+u1*u1))-(sqrt(1.+u1*u1)-1.)/u1
-      phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      if (u2 .gt. 1.e10) then
+         phi2 = log(2. * u2) - 1.
+      else if (abs(u2) .lt. 1.e-30) then
+         phi2 = 0.0
+      else
+         phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      endif
 
       avej = gd*(phi1 - phi2)/((kw+kc*(biophyt
 # if defined O_npzd_nitrogen
@@ -1749,7 +1755,13 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
       u2 = u1*f1
 !     for the following approximation ensure that u1 < 20
       phi1 = log(u1+sqrt(1.+u1*u1))-(sqrt(1.+u1*u1)-1.)/u1
-      phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      if (u2 .gt. 1.e10) then
+         phi2 = log(2. * u2) - 1.
+      else if (abs(u2) .lt. 1.e-30) then
+         phi2 = 0.0
+      else
+         phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      endif
       avej_C = gd_C*(phi1 - phi2)/((kw+kc*(biophyt
 #  if defined O_npzd_nitrogen
      &       +  biodiaz
@@ -2206,7 +2218,11 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         uno3 = npp*dtbio/biono3
         uno3 = min(uno3, 0.999)
         uno3 = max(uno3, trcmin)
-        rno3 = biodin15/(biono3-biodin15)
+        if (abs(biono3-biodin15) .lt. 1.e-30) then
+           rno3 = rn15std
+        else
+           rno3 = biodin15/(biono3-biodin15)
+        endif
         rno3 = min(rno3, 2*rn15std)
         rno3 = max(rno3, rn15std/2.)
         bassim = rno3 + eps_assim*(1.-uno3)/uno3*log(1.-uno3)*rno3/1000.
@@ -2221,7 +2237,11 @@ c        calatt = calatt*caco3flag*coccflag*zoopflag
         brecy = rdon + eps_recy*(1.-udon)/udon*log(1.-udon)*rdon/1000.
         fcrecy = brecy/(1.+brecy)
 
-        rzoop = biozoopn15/(biozoop-biozoopn15)
+        if (abs(biozoop-biozoopn15) .lt. 1.e-30) then
+           rzoop = rn15std
+        else
+           rzoop = biozoopn15/(biozoop-biozoopn15)
+        endif
         rzoop = min(rzoop, 2.*rn15std)
         rzoop = max(rzoop, rn15std/2.)
         bexcr = rzoop - eps_excr*rzoop/1000.

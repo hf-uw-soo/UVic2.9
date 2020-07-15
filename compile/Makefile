@@ -12,7 +12,7 @@ LIBS=common/libcommon.a embm/libembm.a ice/libice.a ism/libism.a\
 #common/libcommon.a: $(OBJS)
 
 uvic: $(LIBS)
-	$(FC) -o uvic -lnetcdff -L/cm/shared/local/netcdf-intel/lib */*.a */*.a
+	$(FC) -o uvic $(FFLAGS) -lnetcdff -L/cm/shared/local/netcdf-intel/lib */*.a */*.a
 #	$(FC) -o uvic_gnu $(FFLAGS) -lnetcdff -lnetcdf -L/ptardat2/ashao/local/gaggle/gnu/netcdf/lib */*.a */*.a
 
 common/libcommon.a:

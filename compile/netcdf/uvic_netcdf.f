@@ -870,8 +870,11 @@
       real, intent(in) :: o, s
       real dout(ln)
       real(kind=8) din(ln), offset, scale
+      real(kind=8) o8, s8
       real(kind=8) tmp
 
+      o8 = dble(o)
+      s8 = dble(s)
       i = nf_inq_varid (ncid, name, iv)
       if (i .ne. nf_noerr) then
         print*, '==> Warning: netcdf variable ',trim(name), ' not found'
@@ -886,8 +889,10 @@
       i = nf_get_vara_double (ncid, iv, is(1:nd), ic(1:nd), din)
       call checkerror(i,'getvara '//name)
       do i = 1, ln
-         tmp = (din(i)*scale + offset)*s + o
-         if (dabs(tmp) < 1.d+38) then
+         tmp = (din(i)*scale + offset)*s8 + o8
+!hf without this line a "floating invalid" error will occur
+         write(0,*) 'tmp=',tmp ! write to stderr, not stdout
+         if (abs(tmp) < 1.d+38) then
             dout(i) = real(tmp)
          else
             dout(i) = real(din(i)) ! missing value, unchanged

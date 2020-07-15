@@ -1,13 +1,17 @@
-      function geoheatflux(lon,lat)
+      real function geoheatflux(lon,lat)
 #if defined O_gthflx
 !     written by Alex Hoffman
 !     put into 2.9 by Andreas Schmittner
 !     input arguments: latitude lat, longitude lon in degrees!
 !     p is longitude and q is colatitude
-      real*8 anm(0:12,0:12), bnm(0:12,0:12), p, con, gcon
-      real*8 q, x, krt, sum, pprime, pp, qq, pi, qtest
-      real*8 lon, lat, xt, yt, geoheatflux
-      integer n, h, m, t, i, j
+      implicit none
+
+      real, intent(in) :: lon, lat
+      real, dimension(0:12,0:12) :: anm, bnm
+      real krt, sum, pprime, pp, qq, pi, con
+
+      real xt, yt, factorial
+      integer n, h, m, t
     
     
       anm(0,0)=86.674
@@ -183,8 +187,7 @@
 
 ! identify constants
       pi = acos(-1.)
-      con = 1./41840000
-      gcon = 360./102
+      con = 1./41840000.
 
 ! Functions from Appendix 1 of Hamza et al. 2007
 ! Begin Loops
@@ -193,11 +196,11 @@
 ! thanks for Juan Muglia for finding it
       yt=(90.-lat)*pi/180.
       xt=lon*pi/180.
-      qq=0
-      qtest=0
+      qq=0.0
+
       do n=0,12
          do m=0,n
-            sum=0
+            sum=0.0
             do t=0,int((n-m)/2)
 
                sum = ((((-1)**t)*factorial(2*n-2*t))/(factorial(t)*
@@ -212,22 +215,25 @@
             else
                h=2
             endif
-            krt = ((factorial(n+m)/factorial(n-m))/(h*(2*n+1.)))**(.5)
-            pp = (pprime)/(krt)
+            krt = sqrt((factorial(n+m)/factorial(n-m))/(h*(2*n+1.)))
+            pp = pprime/krt
          
             qq = (((anm(n,m)*cos(m*xt))+(bnm(n,m)*
-     &           sin(m*xt)))*(pp))+qq
+     &           sin(m*xt)))*pp)+qq
 
          enddo
       enddo
      
       geoheatflux = qq*con
   
-      end
+      end function geoheatflux
+
 ! End loops
 ! Define factorial function!     
       real function factorial(n)
-      integer n
+      implicit none
+
+      integer i, n
       real f
       f=1.
       do i=1,n
@@ -238,5 +244,3 @@
       return
       end
 ! End Spatially Variable Heat Flux (spavar) !
-
-     

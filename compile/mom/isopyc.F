@@ -273,7 +273,8 @@ c         Andreas read this in since it is constant in time
         enddo
       enddo
 
-      do j=jsmw,jemw
+!      do j=jsmw,jemw
+      do j=1,jmw
         do n=1,2
           do k=1,km
             do i=1,imt

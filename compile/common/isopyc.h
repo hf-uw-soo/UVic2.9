@@ -23,11 +23,11 @@
       real addisop
       real ddxt, ddyt, ddzt, Ai_ez, Ai_nz, Ai_bx, Ai_by, K11, K22, K33
       real ahisop, fisop, slmxr, del_dm, s_dmr
-# if defined O_full_tensor
+!# if defined O_full_tensor
       common /cisop_r/ ddxt(imt,km,jmw,2)
-# else
-      common /cisop_r/ ddxt(imt,km,jsmw:jemw,2)
-# endif
+!# else
+!      common /cisop_r/ ddxt(imt,km,jsmw:jemw,2)
+!# endif
       common /cisop_r/ ddyt(imt,km,1:jemw,2)
       common /cisop_r/ ddzt(imt,0:km,jmw,2)
 

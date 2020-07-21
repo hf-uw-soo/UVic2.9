@@ -13,6 +13,8 @@
       real xt, yt, factorial
       integer n, h, m, t
     
+      anm = 0.0
+      bnm = 0.0
     
       anm(0,0)=86.674
       anm(1,0)=-12.999

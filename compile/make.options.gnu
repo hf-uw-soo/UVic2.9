@@ -30,22 +30,22 @@ CPPFLAGS = -DO_even_fluxes -DO_read_my_kmt -DO_read_my_grid -DO_cyclic -DO_time_
 
 
 ###### INTEL
-FC = ifort
+#FC = ifort
 #FFLAGS_GEN = -traceback -mp1 # -fp-stack-check -fpe-all=0 
-FFLAGS_GEN = -mp1 -traceback
-FFLAGS_OPT= -O2 -pg
-FFLAGS_DBG= -g -check all -traceback -fp-stack-check -fpe-all=0 
+#FFLAGS_GEN = -mp1 -traceback
+#FFLAGS_OPT= -O2 -pg
+#FFLAGS_DBG= -g -check all -traceback -fp-stack-check -fpe-all=0 
 #FFLAGS_DBG= -g -check bounds,uninit # -fpe0 
 #FFLAGS_DBG= -g -traceback -fpe0 
 
 ###### GNU
-#FC = gfortran
-#FFLAGS_GEN = # -fpe0 #-ffpe-trap=invalid,zero,overflow # -funsafe-math-optimizations
+FC = /opt/gcc-8.4.0/bin/gfortran
+FFLAGS_GEN = #-ffpe-trap=invalid,zero,overflow # -funsafe-math-optimizations
 
-#FFLAGS_OPT = -O2 -fbacktrace
+FFLAGS_OPT = -O2 -fbacktrace
 
-#FFLAGS_DBG = -g -fbacktrace -Wall -fbounds-check -ffpe-trap=invalid,zero,denormal -Wuninitialized
+FFLAGS_DBG = -g -fbacktrace -Wall -fbounds-check -ffpe-trap=invalid,zero -Wuninitialized
 
 
-#FFLAGS = $(FFLAGS_OPT) $(FFLAGS_GEN)
-FFLAGS = $(FFLAGS_DBG) $(FFLAGS_GEN)
+FFLAGS = $(FFLAGS_OPT) $(FFLAGS_GEN)
+#FFLAGS = $(FFLAGS_DBG) $(FFLAGS_GEN)

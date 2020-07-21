@@ -891,7 +891,7 @@
       do i = 1, ln
          tmp = (din(i)*scale + offset)*s8 + o8
 !hf without this line a "floating invalid" error will occur
-         write(0,*) 'tmp=',tmp ! write to stderr, not stdout
+!         write(0,*) 'tmp=',tmp ! write to stderr, not stdout
          if (abs(tmp) < 1.d+38) then
             dout(i) = real(tmp)
          else

@@ -1729,7 +1729,13 @@ c         if (zt(k) .le. 200000.) sg_bdeni = sgbdfac*sg_bdeni
       u2 = u1*f1
 !     for the following approximation ensure that u1 < 20
       phi1 = log(u1+sqrt(1.+u1*u1))-(sqrt(1.+u1*u1)-1.)/u1
-      phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      if (u2 .gt. 1.e10) then
+         phi2 = log(2. * u2) - 1.
+      else if (abs(u2) .lt. 1.e-30) then
+         phi2 = 0.0
+      else
+         phi2 = log(u2+sqrt(1.+u2*u2))-(sqrt(1.+u2*u2)-1.)/u2
+      endif
       avej_D = gd_D*(phi1 - phi2)/((kw+kc*(biophyt+biodiaz
 #  if defined O_npzd_caco3
      &       + biococc

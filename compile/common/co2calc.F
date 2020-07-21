@@ -550,7 +550,7 @@ c      dpCO2 = pCO2 - co2*atmpres ! if not O_pCO2_bug_fix
      &     1.0/c -
      &     st *(1.0 + ks/(x/c))**(-2) *(ks*c/x2) -
      &     ft*(1.0 + kf/(x/c))**(-2) *(kf*c/x2) -
-     &     pt*x2*(3.0*a-x*da)/a2
+     &     pt*(x2/a2)*(3.0*a-x*da)
 
       return
       end

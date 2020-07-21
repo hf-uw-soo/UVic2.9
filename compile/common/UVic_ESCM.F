@@ -49,6 +49,7 @@
 !     incorrect use. It is left to the user to ensure that a particular
 !     configuration is working correctly.
 !=======================================================================
+      use, intrinsic :: ieee_arithmetic
 
       implicit none
 
@@ -73,6 +74,9 @@
 #if defined O_mom
 #include "mw.h"
 #endif
+
+      call ieee_set_underflow_mode(.false.)
+
       print*, '== UNIVERSITY OF VICTORIA EARTH SYSTEM CLIMATE MODEL =='
       print*, '                                            '
 

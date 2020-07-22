@@ -81,11 +81,11 @@
       character(16) :: variable
       character(*) :: bc_symm
 
-      integer npt, mscan, j, i, isle, nisle, n
+      integer npt, mscan, mxscan, j, i, isle, nisle, n
 
       logical converged
 
-      real c0, c1, sor, mxscan, resmax, absmax, resis, step, step1
+      real c0, c1, sor, resmax, absmax, resis, step, step1
       real estimated_error, crit, cfactor, convergence_rate
 
 !     dimensions of local arrays

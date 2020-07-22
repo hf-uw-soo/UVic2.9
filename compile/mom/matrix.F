@@ -205,7 +205,7 @@ C======================================================
       include "param.h"
       
       integer iSlice      
-      real*8 fld(1:imt,1:km,1:jmt)
+      real fld(1:imt,1:km,1:jmt)
       character*(*) filename
 
       real*8 tmp(imtm2,jmtm2,km)       
@@ -213,7 +213,7 @@ C======================================================
 
       do j=2,jmtm1
         do k=1,km
-          tmp(1:imtm2,j-1,k)=fld(2:imtm1,k,j)
+          tmp(1:imtm2,j-1,k)=dble(fld(2:imtm1,k,j))
         enddo
       enddo  
 

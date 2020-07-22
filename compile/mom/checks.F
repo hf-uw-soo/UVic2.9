@@ -4,9 +4,9 @@
       implicit none
 
       integer i, k, j, ip, kr, jq, n, num_mw, jb, jjs, jj, ncrow, jw
-      integer je, in, is, numk
+      integer je, in, is, numk, jrow
 
-      real critv, t1, dymin, dxmin, jrow, dzmin, xlmax, dtxl, num
+      real critv, t1, dymin, dxmin, dzmin, xlmax, dtxl, num
       real dxdymn, fimax, fmax, dysq, dxsq, clix, h1, h2, hx
 
       logical errorc, vmixset, hmixset

@@ -18,6 +18,7 @@
       end
 
       real function ADV_Ty(i, k, j, jrow, n)
+      use memory_window, only: adv_vnt
       implicit none
       integer, intent(in) :: i, k, j, jrow, n
       include "size.h"

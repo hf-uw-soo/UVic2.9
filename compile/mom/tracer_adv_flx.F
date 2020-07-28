@@ -407,7 +407,7 @@
 !       adv_fe = 2*advective flux across eastern face of T-cell
 !       adv_fb = 2*advective flux across bottom face of T-cell
 !=======================================================================
-
+      use memory_window, only: adv_vnt  
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, istrt, is, iend, ie

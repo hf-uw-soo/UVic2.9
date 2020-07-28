@@ -237,9 +237,10 @@
 !     grad_p   = hydrostatic pressure gradient for "u" cell. There are
 !                two components: (1,2) is for (dp/dx, dp/dy)
 
-      real adv_vet, adv_vnt, adv_veu, adv_vnu, adv_vbt, adv_vbu, rho
+      real adv_vet, adv_veu, adv_vnu, adv_vbt, adv_vbu, rho
       real rhotaum1, rhotaup1, rhotilde, grad_p
-      common /mw_r/ adv_vet(imt,km,jsmw:jmw), adv_vnt(imt,km,1:jmw)
+      common /mw_r/ adv_vet(imt,km,jsmw:jmw)
+!, adv_vnt(imt,km,1:jmw)
       common /mw_r/ adv_veu(imt,km,jsmw:jemw)
       common /mw_r/ adv_vnu(imt,km,1:jemw)
       common /mw_r/ adv_vbt(imt,0:km,jsmw:jmw)

@@ -4,7 +4,8 @@ CPP = /lib/cpp
 
 .SUFFIXES: .o .f .F .FF
 
-SRCS = adv_vel.F  bhf.F blmixi.F       clinic.F         convect.F   diag.F\
+SRCS = memory_window.F\
+     adv_vel.F  bhf.F blmixi.F       clinic.F         convect.F   diag.F\
      energy.F  hyper3.F  isopyc.F  mom.F       mom_tbt.F  npzd_src.F\
      ppmix.F   setkmp.F  smagnl.F  tbt.F       tracer_adv_flx.F  vmixc.F\
      bardiv.F   calc_psgrad.F  congrad.F        delsq.F     diagi.F  gyre.F\

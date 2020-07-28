@@ -174,7 +174,7 @@
 !      ie = ending longitude index in the MW
 !      note: iss,iee bypassed to optimize performance
 !=======================================================================
-
+      use memory_window, only: adv_vnt
       implicit none
 
       integer i, k, j, ip, kr, jq, is, ie, nrows, move, jfrom, jto, n

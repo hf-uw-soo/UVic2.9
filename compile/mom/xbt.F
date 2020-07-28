@@ -317,7 +317,7 @@
 !       je    = ending row in the MW
 !       n     = tracer component
 !=======================================================================
-
+      use memory_window, only: adv_vnt
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, js, je, joff, nth, lev

@@ -73,8 +73,10 @@
 !           per thousand (ppt) by adding 0.035 grams/cm**3 to the model
 !           units and then multiplying by 1000.
 
-      real u,t
-      common /mw_r/ u(imt,km,jmw,2,-1:1), t(imt,km,jmw,nt,-1:1)
+      real u
+!,t
+      common /mw_r/ u(imt,km,jmw,2,-1:1)
+!, t(imt,km,jmw,nt,-1:1)
 
 !     indicies for ocean tracer array
 !       itemp  = index for temperature

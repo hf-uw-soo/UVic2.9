@@ -8,7 +8,7 @@
 !       je    = ending row in the MW
 !       n     = tracer component
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, js, je, joff
@@ -204,7 +204,7 @@
 !       js    = starting row in the MW
 !       je    = ending row in the MW
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer iterm, j, js, je, jrow, joff, i, n, k

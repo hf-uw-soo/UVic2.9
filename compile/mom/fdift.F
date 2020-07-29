@@ -21,7 +21,7 @@
 #if defined O_fct
       use memory_window, only: adv_vnt, adv_fn
 #else
-      use memory_window, only: adv_vnt
+      use memory_window, only: adv_vnt, t
 #endif
       implicit none
       integer, intent(in) :: i, k, j, jrow, n
@@ -68,6 +68,7 @@
 !     gent_mcwilliams isopycnal advective terms simulating the effect
 !     of eddies on the isopycnals
       real function ADV_Txiso(i, k, j, n)
+      use memory_window, only: t
       implicit none
       integer, intent(in) :: i, k, j, n
       include "size.h"
@@ -83,6 +84,7 @@
 
       real function ADV_Tyiso(i, k, j, jrow, n)
       use isopyc, only: adv_vntiso
+      use memory_window, only: t
       implicit none
       integer, intent(in) :: i, k, j, jrow, n
       include "size.h"
@@ -128,6 +130,9 @@
 
 !     meridional component
       real function DIFF_Ty(i, k, j, jrow, n)
+#if defined O_consthmix && !defined O_biharmonic && !defined O_isopycmix
+      use memory_window, only: t
+#endif
       implicit none
       integer, intent(in) :: i, k, j, jrow, n
       include "size.h"

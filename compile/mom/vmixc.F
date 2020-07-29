@@ -12,7 +12,7 @@
 !       is   = starting longitude index in the MW
 !       ie   = ending longitude index in the MW
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, istrt, is, iend, ie, jstrt

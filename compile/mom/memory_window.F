@@ -11,6 +11,6 @@
 #if defined O_fct
       real :: adv_fn(imt,km,1:jemw)
 #endif
-!      real :: t(imt,km,jmw,nt,-1:1)
+      real :: t(imt,km,jmw,nt,-1:1)
 
       end module memory_window

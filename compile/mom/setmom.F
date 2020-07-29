@@ -1128,7 +1128,7 @@ c        edr(2:imtm1,2:jmtm1) = tmpij(1:imtm2,1:jmtm2)
 !     yt   = latitudes of "t" points
 !     zt   = depths of "t" points
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       character(120) :: fname, new_file_name, text

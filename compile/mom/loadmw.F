@@ -13,7 +13,7 @@
 !       num1 = "tau-1" latitude disk unit
 !       nu   = "tau" latitude disk unit
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer istrt, is, iend, ie, j, js, je, jrow, joff, k, i, num1
@@ -174,7 +174,7 @@
 !      ie = ending longitude index in the MW
 !      note: iss,iee bypassed to optimize performance
 !=======================================================================
-      use memory_window, only: adv_vnt
+      use memory_window, only: adv_vnt, t
 # if defined O_gent_mcwilliams
       use isopyc, only: adv_vntiso
 # endif
@@ -543,7 +543,7 @@
 !       num1 = "tau-1" latitude disk unit
 !       nu   = "tau" latitude disk unit
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer j, js, je, jrow, joff, num1, nu, k, i, is, ie, n
@@ -723,7 +723,7 @@
 !     write prognostic quantities from MW to disk unit "nup1" (tau+1)
 !     for rows "js" to "je".
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer j, js, je, jrow, joff, nup1

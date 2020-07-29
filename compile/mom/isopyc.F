@@ -368,7 +368,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     Estimate alpha, beta, and normal gradients on faces of T cells
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, is, ie, n, kp1, jrow, joff
@@ -987,7 +987,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     isopycnal diffusive tracer fluxes are computed.
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, km1kr, kpkr

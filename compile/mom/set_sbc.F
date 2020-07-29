@@ -13,7 +13,7 @@
 !       isbc  = index for sbc
 !       itr   = index for tracer
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer isbc, itr, j, js, je, jrow, joff, i, is, ie, taut

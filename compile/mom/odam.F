@@ -216,7 +216,7 @@
 !     copy all latitude rows from time level "ifrom" to time level "ito"
 !     for prognostic variables in the MW
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer n, j, k, i, ito, ifrom
@@ -255,7 +255,7 @@
 !     and "tau+1" data, after shuffling, data will be in proper position
 !     for the next time step.
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer n, j, k, i

@@ -4,7 +4,7 @@
 !=======================================================================
 !     compute del**2 of prognostic variables on MW rows "js" ... "je"
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, n, ip, jp, jrow, js, je, jstrt, jend, m, joff

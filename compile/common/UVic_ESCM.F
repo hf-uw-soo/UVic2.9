@@ -344,7 +344,9 @@
       end
 
       subroutine chkcpl
-
+#if defined O_sealev_salinity && defined O_mom
+      use memory_window, only: t
+#endif
       implicit none
 
       integer jrow, j, i, k
@@ -776,7 +778,7 @@
 !-----------------------------------------------------------------------
 !     read surface tracers from disk row "jrow"
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer i, jrow, ntabc

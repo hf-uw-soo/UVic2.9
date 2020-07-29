@@ -13,7 +13,7 @@
 !       is   = starting longitude index in the MW
 !       ie   = ending longitude index in the MW
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       character(120) :: fname, new_file_name
@@ -1290,7 +1290,7 @@ C SPK: this used to be twodt(1) but in offline mode this is not set anywhere
 !       n     = (1,2) = (u,v) velocity component
 !       twodt = (2*dtts,dtts) on (leapfrog,mixing) time steps
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, js, je, joff, is, ie
@@ -1781,7 +1781,7 @@ C SPK: this used to be twodt(1) but in offline mode this is not set anywhere
 !       isbc  = index for sbc
 !       itr   = index for tracer
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer isbc, itr, j, js, je, jrow, joff, i, is, ie
@@ -1855,7 +1855,7 @@ C SPK: this used to be twodt(1) but in offline mode this is not set anywhere
 !       n     = tracer component
 !       twodt = (2*dtts, dtts) on (leapfrog, mixing) time steps
 !-----------------------------------------------------------------------
-
+      use memory_window, only: t
       implicit none
 
       integer j, js, je, k, i, is, ie, n, joff

@@ -15,7 +15,7 @@
 !     fname              = file name
 !     ids, ide ...       = start and end index for data domain
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       character(*) :: fname
@@ -935,7 +935,7 @@
 !     fname              = file name
 !     ids, ide ...       = start and end index for data domain
 !=======================================================================
-
+      use memory_window, only: t
       implicit none
 
       character(*) :: fname

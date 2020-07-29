@@ -318,6 +318,9 @@
 !       n     = tracer component
 !=======================================================================
       use memory_window, only: adv_vnt
+# if defined O_gent_mcwilliams && !defined O_fct
+      use isopyc, only: adv_vntiso
+# endif
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, js, je, joff, nth, lev

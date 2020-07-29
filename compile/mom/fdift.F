@@ -78,6 +78,7 @@
 
 
       real function ADV_Tyiso(i, k, j, jrow, n)
+      use isopyc, only: adv_vntiso
       implicit none
       integer, intent(in) :: i, k, j, jrow, n
       include "size.h"

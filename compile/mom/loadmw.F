@@ -175,6 +175,9 @@
 !      note: iss,iee bypassed to optimize performance
 !=======================================================================
       use memory_window, only: adv_vnt
+# if defined O_gent_mcwilliams
+      use isopyc, only: adv_vntiso
+# endif
       implicit none
 
       integer i, k, j, ip, kr, jq, is, ie, nrows, move, jfrom, jto, n

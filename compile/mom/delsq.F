@@ -12,7 +12,7 @@
 
       real t_i, t_j, dz_t2r, dz_tr, dz_wtr, dx_t2r, dx_tr, dy_t2r
       real dy_tr, adv_tx, adv_ty, adv_tz, adv_f4n, adv_txiso
-      real adv_vetiso, adv_tyiso, adv_vntiso, adv_tziso, adv_fbiso
+      real adv_vetiso, adv_tyiso, adv_tziso, adv_fbiso
       real diff_tx, diff_ty, diff_tz, aidif, adv_ux, adv_uy, adv_uz
       real adv_metric, diff_ux, diff_uz, diff_uy, unep, diff_metric
       real del2, coriolis, ahbi_cstr, ahbi_csu_dyur, ambi_csur

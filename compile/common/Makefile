@@ -13,7 +13,8 @@ all: $(ALL)
 #	solardata.o sulphdata.o switch.o timeinterp.o tmngr.o topog.o\
 #	util.o UVic_ESCM.o volcdata.o
 
-SRCS =  aggdata.F c14data.F cfcdata.F co2calc.F co2data.F co2distdata.F\
+SRCS =  mod_isopyc.F\
+	aggdata.F c14data.F cfcdata.F co2calc.F co2data.F co2distdata.F\
 	data.F def_files.F file_names.F filfir.F filt.F filtr.F filuv.F\
 	findex.F gasbc.F global_sums.F gosbc.F grids.F icedata.F iomngr.F\
 	isleperim.F reg1st.F sealevdata.F setcom.F setdata.F size_check.F\

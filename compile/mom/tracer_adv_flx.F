@@ -408,6 +408,9 @@
 !       adv_fb = 2*advective flux across bottom face of T-cell
 !=======================================================================
       use memory_window, only: adv_vnt  
+#  if defined O_gent_mcwilliams
+      use isopyc, only: adv_vntiso
+#  endif
       implicit none
 
       integer i, k, j, ip, kr, jq, n, jp, jrow, istrt, is, iend, ie

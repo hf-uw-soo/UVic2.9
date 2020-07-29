@@ -291,10 +291,10 @@
 
       real adv_fe
       common /mw_r/ adv_fe(imt,km,jsmw:jemw)
-#if defined O_fct
-      real adv_fn
-      common /mw_r/ adv_fn(imt,km,1:jemw)
-#endif
+!#if defined O_fct
+!      real adv_fn
+!      common /mw_r/ adv_fn(imt,km,1:jemw)
+!#endif
       real adv_fb, diff_fe
       common /mw_r/ adv_fb(imt,0:km,jsmw:jemw)
       common /mw_r/ diff_fe(imt,km,jsmw:jemw)

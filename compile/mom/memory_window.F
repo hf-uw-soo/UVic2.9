@@ -9,7 +9,7 @@
 
       real :: adv_vnt(imt,km,1:jmw)
 #if defined O_fct
-!      real :: adv_fn(imt,km,1:jemw)
+      real :: adv_fn(imt,km,1:jemw)
 #endif
 !      real :: t(imt,km,jmw,nt,-1:1)
 

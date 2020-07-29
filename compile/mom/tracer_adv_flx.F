@@ -407,7 +407,7 @@
 !       adv_fe = 2*advective flux across eastern face of T-cell
 !       adv_fb = 2*advective flux across bottom face of T-cell
 !=======================================================================
-      use memory_window, only: adv_vnt  
+      use memory_window, only: adv_vnt, adv_fn
 #  if defined O_gent_mcwilliams
       use isopyc, only: adv_vntiso
 #  endif

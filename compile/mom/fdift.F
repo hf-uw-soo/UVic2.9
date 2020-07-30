@@ -90,7 +90,7 @@
       include "size.h"
       include "mw.h"
       include "grdvar.h"
-      include "isopyc.h"
+!      include "isopyc.h"
 
       ADV_Tyiso = cstdyt2r(jrow)*(adv_vntiso(i,k,j)
      &  *(t(i,k,j+1,n,taum1) + t(i,k,j,n,taum1)) - adv_vntiso(i,k,j-1)

@@ -500,6 +500,13 @@
 !-----------------------------------------------------------------------
 
       jlast = min(jend+1+joff,jmt-1) - joff
+!$OMP PARALLEL DO DEFAULT(NONE)
+#  if defined O_gent_mcwilliams
+!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_vntiso,adv_fn,t)
+#  else
+!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_fn,t)
+#  endif
+!$OMP&PRIVATE(totadv,j,k,i)
       do j=js-1,jlast
         do k=1,km
           do i=istrt,iend
@@ -514,6 +521,7 @@
           enddo
         enddo
       enddo
+!     $OMP END PARALLEL DO
 
       jlast = min(jend+1+joff,jmt-1) - joff
       do j=js,jlast

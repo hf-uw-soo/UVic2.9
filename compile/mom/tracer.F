@@ -320,6 +320,7 @@
       rdtts = 1./c2dtts
       rnbio = 1./nbio
 
+      src = 0.0
 
       do j=js,je
         jrow = j + joff

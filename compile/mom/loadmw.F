@@ -176,7 +176,7 @@
 !=======================================================================
       use memory_window, only: adv_vnt, t
 # if defined O_gent_mcwilliams
-      use isopyc, only: adv_vntiso
+      use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif
       implicit none
 

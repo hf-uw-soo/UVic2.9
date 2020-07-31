@@ -59,11 +59,11 @@
 !     athkdf = isopycnal thickness diffusivity (cm**2/sec)
 
 !      real athkdf, adv_vetiso, adv_vntiso, adv_vbtiso, adv_fbiso
-      real athkdf, adv_vetiso, adv_vbtiso, adv_fbiso
+      real athkdf, adv_fbiso
       common /cisop_r/ athkdf
-      common /cisop_r/ adv_vetiso(imt,km,jsmw:jemw)
+!      common /cisop_r/ adv_vetiso(imt,km,jsmw:jemw)
 !      common /cisop_r/ adv_vntiso(imt,km,1:jemw)
-      common /cisop_r/ adv_vbtiso(imt,0:km,jsmw:jemw)
+!      common /cisop_r/ adv_vbtiso(imt,0:km,jsmw:jemw)
       common /cisop_r/ adv_fbiso(imt,0:km,jsmw:jemw)
 # endif
 

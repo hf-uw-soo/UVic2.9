@@ -68,6 +68,7 @@
 !     gent_mcwilliams isopycnal advective terms simulating the effect
 !     of eddies on the isopycnals
       real function ADV_Txiso(i, k, j, n)
+      use isopyc, only: adv_vetiso
       use memory_window, only: t
       implicit none
       integer, intent(in) :: i, k, j, n

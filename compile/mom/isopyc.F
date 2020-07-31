@@ -24,7 +24,7 @@
 !       The above input can be reset via namelist
 !=======================================================================
 #  if defined O_gent_mcwilliams
-      use isopyc, only: adv_vntiso
+      use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 #  endif
       implicit none
 
@@ -987,6 +987,9 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     isopycnal diffusive tracer fluxes are computed.
 !=======================================================================
+#  if defined O_gent_mcwilliams
+      use isopyc, only: adv_vbtiso
+#  endif
       use memory_window, only: t
       implicit none
 
@@ -1258,7 +1261,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     compute isopycnal transport velocities.
 !=======================================================================
-      use isopyc, only: adv_vntiso
+      use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, km1, kp1

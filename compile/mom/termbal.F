@@ -364,7 +364,7 @@
 !       ie    = ending longitude index in the MW
 !       n     = tracer component
 !=======================================================================
-      use memory_window, only: adv_vnt, t
+      use memory_window, only: adv_vnt, adv_vbt, adv_vet, t
 # if defined O_gent_mcwilliams && !defined O_fct
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif

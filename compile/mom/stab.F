@@ -25,7 +25,7 @@
 !-----------------------------------------------------------------------
 !     test for various measures of stability
 !-----------------------------------------------------------------------
-      use memory_window, only: t
+      use memory_window, only: adv_vbt, t
       implicit none
 
       integer i, k, j, ip, kr, jq, jrow, is, ie, ks, ke, m, kp1, kk

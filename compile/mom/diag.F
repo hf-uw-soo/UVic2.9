@@ -12,7 +12,7 @@
 !      is     = starting longitude index for calculations
 !      ie     = ending longitude index for calculations
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: adv_vbt, t
       implicit none
 
       character(120) :: fname

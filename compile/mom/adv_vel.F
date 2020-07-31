@@ -19,7 +19,7 @@
 !       adv_vnu = advection velocity on north face of "u" cell
 !       adv_vbu = advection velocity on bottom face of "u" cell
 !=======================================================================
-      use memory_window, only: adv_vnt
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt
       implicit none
 
       integer js, je, istrt, is, iend, ie, j, jrow, joff, k, i, jstbe

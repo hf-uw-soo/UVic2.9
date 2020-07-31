@@ -317,7 +317,7 @@
 !       je    = ending row in the MW
 !       n     = tracer component
 !=======================================================================
-      use memory_window, only: adv_vnt, t
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t
 # if defined O_gent_mcwilliams && !defined O_fct
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif

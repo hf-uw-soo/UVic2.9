@@ -7,6 +7,8 @@
 !     this is where imt etc. parameters are defined:
       include "size.h"
 
+      real :: adv_vbt(imt,0:km,jsmw:jmw)
+      real :: adv_vet(imt,km,jsmw:jmw)
       real :: adv_vnt(imt,km,1:jmw)
       real :: adv_fb(imt,0:km,jsmw:jemw)
       real :: adv_fe(imt,km,jsmw:jemw)

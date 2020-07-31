@@ -503,7 +503,7 @@
       jlast = min(jend+1+joff,jmt-1) - joff
 !$OMP PARALLEL DO DEFAULT(NONE)
 #  if defined O_gent_mcwilliams
-!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_vntiso,adv_fn,t)
+!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_fn,t,adv_vntiso)
 #  else
 !$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_fn,t)
 #  endif
@@ -525,6 +525,15 @@
 !     $OMP END PARALLEL DO
 
       jlast = min(jend+1+joff,jmt-1) - joff
+!$OMP PARALLEL DO DEFAULT(NONE)
+#  if defined O_gent_mcwilliams
+!$OMP&SHARED(istrt,istrtm1,iend,js,jlast,n,taum1,adv_fb,adv_fe,
+!$OMP&adv_vbt,adv_vet,t,adv_vbtiso,adv_vetiso)
+#  else
+!$OMP&SHARED(istrt,istrtm1,iend,js,jlast,n,taum1,adv_fb,adv_fe,
+!$OMP&adv_vbt,adv_vet,t)
+#  endif
+!$OMP&PRIVATE(totadv,j,k,i)
       do j=js,jlast
         do k=1,km
           do i=istrtm1,iend
@@ -556,6 +565,7 @@
           adv_fb(i,km,j) = c0
         enddo
       enddo
+!     $OMP END PARALLEL DO
 
 !-----------------------------------------------------------------------
 !     main j loop

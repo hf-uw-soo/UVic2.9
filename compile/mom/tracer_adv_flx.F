@@ -408,7 +408,7 @@
 !       adv_fb = 2*advective flux across bottom face of T-cell
 !=======================================================================
       use memory_window, only: adv_fb, adv_fe, adv_fn, adv_vbt, 
-     &       adv_vet, adv_vnt, t
+     &       adv_vet, adv_vnt, anti_fe, anti_fn, t
 #  if defined O_gent_mcwilliams
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 #  endif
@@ -604,6 +604,14 @@
 !       scheme flux (leap frog) minus the low order (upstream)
 !-----------------------------------------------------------------------
 
+!$OMP PARALLEL DO DEFAULT(NONE)
+#  if defined O_gent_mcwilliams
+!$OMP&SHARED(istrt,istrtm1,iend,j,jp1,n,tau,adv_vet,anti_fe,anti_fn,t,
+!$OMP&SHAREDadv_vetiso)
+#  else
+!$OMP&SHARED(istrt,istrtm1,iend,j,jp1,n,tau,adv_vet,anti_fe,anti_fn,t)
+#  endif
+!$OMP&PRIVATE(totadv,k,i)
         do k=1,km
           do i=istrtm1,iend
             totadv = adv_vet(i,k,jp1)
@@ -622,6 +630,7 @@
      &                           t(i,k,jp2,n,tau)) - adv_fn(i,k,jp1)
           enddo
         enddo
+!     $OMP END PARALLEL DO
 
         do k=1,kmm1
           do i=istrt,iend

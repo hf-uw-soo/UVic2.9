@@ -10,10 +10,12 @@
       real :: adv_vbt(imt,0:km,jsmw:jmw)
       real :: adv_vet(imt,km,jsmw:jmw)
       real :: adv_vnt(imt,km,1:jmw)
+#if defined O_fct
       real :: adv_fb(imt,0:km,jsmw:jemw)
       real :: adv_fe(imt,km,jsmw:jemw)
-#if defined O_fct
       real :: adv_fn(imt,km,1:jemw)
+      real :: anti_fe(imt,km,jsmw:jmw,nt)
+      real :: anti_fn(imt,km,1:jmw-1+jmw/jmt,nt)
 #endif
       real :: t(imt,km,jmw,nt,-1:1)
 

@@ -377,9 +377,7 @@
 !     R_minusY = ratio of minimal feasible to minimal possible change
 !               of tracer T in subroutine tracer.F, N-S dimension delimiter
 
-      real anti_fe, anti_fn, anti_fb, R_plusY, R_minusY
-      common /mw_r/ anti_fe(imt,km,jsmw:jmw,nt)
-      common /mw_r/ anti_fn(imt,km,1:jmw-1+jmw/jmt,nt)
+      real anti_fb, R_plusY, R_minusY
       common /mw_r/ anti_fb(imt,0:km,jsmw:jmw,nt)
       common /mw_r/ R_plusY(imt,km,1:jmw-1+jmw/jmt,nt)
       common /mw_r/ R_minusY(imt,km,1:jmw-1+jmw/jmt,nt)

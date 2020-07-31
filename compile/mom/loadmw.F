@@ -174,7 +174,12 @@
 !      ie = ending longitude index in the MW
 !      note: iss,iee bypassed to optimize performance
 !=======================================================================
+# if defined O_fct
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t, 
+     &     anti_fe, anti_fn
+# else
       use memory_window, only: adv_vbt, adv_vet, adv_vnt, t
+# endif
 # if defined O_gent_mcwilliams
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif

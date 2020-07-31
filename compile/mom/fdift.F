@@ -5,6 +5,9 @@
 !-----------------------------------------------------------------------
 
       real function ADV_Tx(i, k, j)
+#if !defined O_linearized_advection
+      use memory_window, only: adv_fe
+#endif
       implicit none
       integer, intent(in) :: i, k, j
       include "size.h"
@@ -50,10 +53,11 @@
 
 
       real function ADV_Tz(i, k, j)
+      use memory_window, only: adv_fb
       implicit none
       integer, intent(in) :: i, k, j
       include "size.h"
-      include "mw.h"
+!      include "mw.h"
       include "grdvar.h"
 
 #if defined O_linearized_advection

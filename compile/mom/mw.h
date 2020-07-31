@@ -291,14 +291,7 @@
 !     diff_fb  = diffusive flux across the bottom face of a cell
 !     source   = source term
 
-      real adv_fe
-      common /mw_r/ adv_fe(imt,km,jsmw:jemw)
-!#if defined O_fct
-!      real adv_fn
-!      common /mw_r/ adv_fn(imt,km,1:jemw)
-!#endif
-      real adv_fb, diff_fe
-      common /mw_r/ adv_fb(imt,0:km,jsmw:jemw)
+      real diff_fe
       common /mw_r/ diff_fe(imt,km,jsmw:jemw)
 #if !defined O_consthmix || defined O_biharmonic || defined O_isopycmix
       real diff_fn

@@ -8,6 +8,9 @@
 !-----------------------------------------------------------------------
 
       real function ADV_Ux(i, k, j)
+#if !defined O_linearized_advection
+      use memory_window, only: adv_fe
+#endif
       implicit none
       integer, intent(in) :: i, k, j
       include "size.h"
@@ -41,6 +44,9 @@
 
 
       real function ADV_Uz(i, k, j)
+#if !defined O_linearized_advection
+      use memory_window, only: adv_fb
+#endif
       implicit none
       integer, intent(in) :: i, k, j
       include "size.h"

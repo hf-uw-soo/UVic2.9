@@ -12,7 +12,11 @@
 !       is   = starting longitude index in the MW
 !       ie   = ending longitude index in the MW
 !=======================================================================
-      use memory_window, only: t
+# if !defined O_linearized_advection
+      use memory_window, only: adv_fb, adv_fe, t
+# else
+      use memory_window, only: adv_fb, t
+# endif
       implicit none
 
       integer istrt, iend

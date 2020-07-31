@@ -4,7 +4,7 @@
 !=======================================================================
 !     set up everything which must be done only once per run
 !=======================================================================
-
+      use memory_window, only: adv_fb
       implicit none
 
       character (120) :: fname, new_file_name

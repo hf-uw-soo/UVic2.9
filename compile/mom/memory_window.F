@@ -8,6 +8,8 @@
       include "size.h"
 
       real :: adv_vnt(imt,km,1:jmw)
+      real :: adv_fb(imt,0:km,jsmw:jemw)
+      real :: adv_fe(imt,km,jsmw:jemw)
 #if defined O_fct
       real :: adv_fn(imt,km,1:jemw)
 #endif

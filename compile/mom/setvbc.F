@@ -11,7 +11,7 @@
 !       is   = starting longitude index in the MW
 !       ie   = ending longitude index in the MW
 !=======================================================================
-
+      use memory_window, only: tmask
       implicit none
 
       integer js, je, istrt, is, iend, ie, n, j, i, jrow, joff, kz

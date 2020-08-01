@@ -12,7 +12,7 @@
 !       ie    = ending longitude index in the MW
 !       n     = tracer component
 !-----------------------------------------------------------------------
-      use memory_window, only: adv_vnt, t
+      use memory_window, only: adv_vnt, t, tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, is, ie, n

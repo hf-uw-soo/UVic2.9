@@ -244,7 +244,7 @@
 !      visc_cbu = viscosity coefficient at bottom of "u" cells (cm**2/s)
 !      diff_cbt = diffusion coefficient at bottom of "t" cells (cm**2/s)
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer tlev, istrt, is, iend, ie, joff, js, k, i, ks, je, j

@@ -13,7 +13,7 @@
 !       num1 = "tau-1" latitude disk unit
 !       nu   = "tau" latitude disk unit
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer istrt, is, iend, ie, j, js, je, jrow, joff, k, i, num1
@@ -175,10 +175,10 @@
 !      note: iss,iee bypassed to optimize performance
 !=======================================================================
 # if defined O_fct
-      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t, 
-     &     anti_fe, anti_fn
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t, tmask,
+     &     anti_fb, anti_fe, anti_fn
 # else
-      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t, tmask
 # endif
 # if defined O_gent_mcwilliams
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso

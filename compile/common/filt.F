@@ -8,7 +8,7 @@
 !     impulse response filtering (when the "firfil" option is defined)
 !     of tracers at the specifiied high latitude row "jrow".
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer n, j, js, je, jrow, joff, jj, isave, ieave, l, k

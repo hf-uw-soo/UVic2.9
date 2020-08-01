@@ -258,8 +258,9 @@
 !     tmask = tracer cell land/sea mask   = (0.0, 1.0) on (land, sea)
 !     umask = velocity cell land/sea mask = (0.0, 1.0) on (land, sea)
 
-      real tmask, umask
-      common /mw_r/ tmask(imt,km,1:jmw), umask(imt,km,1:jmw)
+      real umask
+!      common /mw_r/ tmask(imt,km,1:jmw), umask(imt,km,1:jmw)
+      common /mw_r/ umask(imt,km,1:jmw)
 
 #if defined O_fourth_order_tracer_advection || defined O_quicker
 
@@ -377,8 +378,8 @@
 !     R_minusY = ratio of minimal feasible to minimal possible change
 !               of tracer T in subroutine tracer.F, N-S dimension delimiter
 
-      real anti_fb, R_plusY, R_minusY
-      common /mw_r/ anti_fb(imt,0:km,jsmw:jmw,nt)
+      real R_plusY, R_minusY
+!      common /mw_r/ anti_fb(imt,0:km,jsmw:jmw,nt)
       common /mw_r/ R_plusY(imt,km,1:jmw-1+jmw/jmt,nt)
       common /mw_r/ R_minusY(imt,km,1:jmw-1+jmw/jmt,nt)
 # if defined O_fct_dlm2 && !defined O_fct_dlm1

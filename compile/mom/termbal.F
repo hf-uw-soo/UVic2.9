@@ -364,7 +364,7 @@
 !       ie    = ending longitude index in the MW
 !       n     = tracer component
 !=======================================================================
-      use memory_window, only: adv_vnt, adv_vbt, adv_vet, t
+      use memory_window, only: adv_vnt, adv_vbt, adv_vet, t, tmask
 # if defined O_gent_mcwilliams && !defined O_fct
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif
@@ -607,7 +607,7 @@
 !     iterm = 1  => total change
 !     iterm = 10 => change due to filtering
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer iterm, j, js, je, jrow, joff, n, k, i, is, ie, nreg

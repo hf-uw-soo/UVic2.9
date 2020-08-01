@@ -204,7 +204,7 @@
 !       js    = starting row in the MW
 !       je    = ending row in the MW
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer iterm, j, js, je, jrow, joff, i, n, k

@@ -122,6 +122,7 @@
 
 !     zonal component
       real function DIFF_Tx(i, k, j)
+      use memory_window, only: tmask
       implicit none
       integer, intent(in) :: i, k, j
       include "size.h"
@@ -136,7 +137,9 @@
 !     meridional component
       real function DIFF_Ty(i, k, j, jrow, n)
 #if defined O_consthmix && !defined O_biharmonic && !defined O_isopycmix
-      use memory_window, only: t
+      use memory_window, only: t, tmask
+#else
+      use memory_window, only: tmask
 #endif
       implicit none
       integer, intent(in) :: i, k, j, jrow, n

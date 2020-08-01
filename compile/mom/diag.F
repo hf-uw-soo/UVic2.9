@@ -12,7 +12,11 @@
 !      is     = starting longitude index for calculations
 !      ie     = ending longitude index for calculations
 !=======================================================================
+# if defined O_show_zonal_mean_of_sbc
+      use memory_window, only: adv_vbt, t, tmask
+# else
       use memory_window, only: adv_vbt, t
+# endif
       implicit none
 
       character(120) :: fname

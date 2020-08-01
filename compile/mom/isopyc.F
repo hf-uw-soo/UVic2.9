@@ -368,7 +368,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     Estimate alpha, beta, and normal gradients on faces of T cells
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, is, ie, n, kp1, jrow, joff
@@ -567,7 +567,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     compute "Ai_ez" & "K11" at the center of eastern face of T cells.
 !=======================================================================
-
+      use memory_window, only: t, tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
@@ -686,7 +686,7 @@ c         Andreas read this in since it is constant in time
 !=======================================================================
 !     compute "Ai_nz" & "K22" at the center of northern face of T cells.
 !=======================================================================
-
+      use memory_window, only: tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
@@ -808,7 +808,7 @@ c         Andreas read this in since it is constant in time
 !     compute Ai_bx, Ai_by, and K33 at the center of the bottom face of
 !     T cells.
 !=======================================================================
-
+      use memory_window, only: t, tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, ie, is
@@ -990,7 +990,7 @@ c         Andreas read this in since it is constant in time
 #  if defined O_gent_mcwilliams
       use isopyc, only: adv_vbtiso
 #  endif
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, km1kr, kpkr
@@ -1262,6 +1262,7 @@ c         Andreas read this in since it is constant in time
 !     compute isopycnal transport velocities.
 !=======================================================================
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
+      use memory_window, only: tmask
       implicit none
 
       integer i, k, j, ip, kr, jq, js, je, jrow, joff, km1, kp1

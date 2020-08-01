@@ -189,7 +189,7 @@
 !       is   = starting longitude index in the MW
 !       ie   = ending longitude index in the MW
 !-----------------------------------------------------------------------
-      use memory_window, only: adv_vbt, adv_vet, adv_vnt
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, tmask
       implicit none
 
       integer j, js, je, jrow, joff, i, is, ie, n, k, kz

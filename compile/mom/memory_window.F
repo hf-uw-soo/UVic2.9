@@ -14,9 +14,11 @@
       real :: adv_fb(imt,0:km,jsmw:jemw)
       real :: adv_fe(imt,km,jsmw:jemw)
       real :: adv_fn(imt,km,1:jemw)
+      real :: anti_fb(imt,0:km,jsmw:jmw,nt)
       real :: anti_fe(imt,km,jsmw:jmw,nt)
       real :: anti_fn(imt,km,1:jmw-1+jmw/jmt,nt)
 #endif
       real :: t(imt,km,jmw,nt,-1:1)
+      real :: tmask(imt,km,1:jmw)
 
       end module memory_window

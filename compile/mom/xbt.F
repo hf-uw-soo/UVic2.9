@@ -317,7 +317,7 @@
 !       je    = ending row in the MW
 !       n     = tracer component
 !=======================================================================
-      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t
+      use memory_window, only: adv_vbt, adv_vet, adv_vnt, t, tmask
 # if defined O_gent_mcwilliams && !defined O_fct
       use isopyc, only: adv_vbtiso, adv_vetiso, adv_vntiso
 # endif
@@ -526,7 +526,7 @@
 !       iterm = 1  => total change
 !       iterm = 10 => change due to filtering
 !=======================================================================
-      use memory_window, only: t
+      use memory_window, only: t, tmask
       implicit none
 
       integer iterm, j, js, je, jrow, joff, nth, i, lev, n, k

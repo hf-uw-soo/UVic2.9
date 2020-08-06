@@ -410,15 +410,13 @@ c      dpCO2 = pCO2 - co2*atmpres ! if not O_pCO2_bug_fix
 ! aragonite (Omga)
       Omega_a = Ca*CO3/Kspa
 
+      CO3 = CO3/permil
 # endif
 ! Convert units of output arguments
 ! Note: co2star and dco2star are calculated in mol/kg within this routine
 ! Thus Convert now from mol/kg -> mol/m^3
       co2star  = co2star/permil
       dco2star = dco2star/permil
-      if (abs(CO3) < 1.e+35) then
-         CO3 = CO3/permil
-      endif
 
 ! Note: pCO2 and dpCO2 are calculated in atm above.
 ! Thus convert now to uatm

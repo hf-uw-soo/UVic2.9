@@ -487,7 +487,7 @@
 #  if defined O_sed
      &,                sedcorgflx, sedcalflx
 #  endif
-     &,                src(i,:,j,:))
+     &,                src(i,:,j,:), i, j)
 
 !juan added dust iron here instead of in the set source/sinks part:
 #  if defined O_npzd_iron
@@ -517,106 +517,109 @@
              ta_rprocal(i,jrow) =  ta_rprocal(i,jrow) + rprca
 #   endif
              do k = 1, kmt(i,jrow)
-              ta_rnpp(i,k,jrow) = ta_rnpp(i,k,jrow) + rnpp(k)
-              ta_rgraz(i,k,jrow) = ta_rgraz(i,k,jrow) + rgraz(k)
-              ta_rgraz_Z(i,k,jrow) = ta_rgraz_Z(i,k,jrow) + rgraz_Z(k)
+              ta_rnpp(i,k,jrow) = ta_rnpp(i,k,jrow) + rnpp(k,i,j)
+              ta_rgraz(i,k,jrow) = ta_rgraz(i,k,jrow) + rgraz(k,i,j)
+              ta_rgraz_Z(i,k,jrow) = ta_rgraz_Z(i,k,jrow) + 
+     &             rgraz_Z(k,i,j)
               ta_rgraz_Det(i,k,jrow) = ta_rgraz_Det(i,k,jrow)
-     &                                 + rgraz_Det(k)
-              ta_rmorp(i,k,jrow) = ta_rmorp(i,k,jrow) + rmorp(k)
-              ta_rmorpt(i,k,jrow)= ta_rmorpt(i,k,jrow) + rmorpt(k)
-              ta_rmorz(i,k,jrow) = ta_rmorz(i,k,jrow) + rmorz(k)
-              ta_rexcr(i,k,jrow) = ta_rexcr(i,k,jrow) + rexcr(k)
+     &                                 + rgraz_Det(k,i,j)
+              ta_rmorp(i,k,jrow) = ta_rmorp(i,k,jrow) + rmorp(k,i,j)
+              ta_rmorpt(i,k,jrow)= ta_rmorpt(i,k,jrow) + rmorpt(k,i,j)
+              ta_rmorz(i,k,jrow) = ta_rmorz(i,k,jrow) + rmorz(k,i,j)
+              ta_rexcr(i,k,jrow) = ta_rexcr(i,k,jrow) + rexcr(k,i,j)
 #   if defined O_npzd_nitrogen
               ta_rnpp_dop(i,k,jrow) = ta_rnpp_dop(i,k,jrow) 
-     &             + rnpp_dop(k)              
-              ta_rnpp_D(i,k,jrow) = ta_rnpp_D(i,k,jrow) + rnpp_D(k)
+     &             + rnpp_dop(k,i,j)              
+              ta_rnpp_D(i,k,jrow) = ta_rnpp_D(i,k,jrow) + rnpp_D(k,i,j)
               ta_rnpp_D_dop(i,k,jrow) = ta_rnpp_D_dop(i,k,jrow) 
-     &             + rnpp_D_dop(k)
-              ta_rgraz_D(i,k,jrow) = ta_rgraz_D(i,k,jrow) + rgraz_D(k)
-              ta_rmorp_D(i,k,jrow) = ta_rmorp_D(i,k,jrow) + rmorp_D(k)
+     &             + rnpp_D_dop(k,i,j)
+              ta_rgraz_D(i,k,jrow) = ta_rgraz_D(i,k,jrow) + 
+     &             rgraz_D(k,i,j)
+              ta_rmorp_D(i,k,jrow) = ta_rmorp_D(i,k,jrow) + 
+     &             rmorp_D(k,i,j)
               ta_rmorpt_D(i,k,jrow) = ta_rmorpt_D(i,k,jrow)
-     &                               + rmorpt_D(k)
-              ta_rnfix(i,k,jrow) = ta_rnfix(i,k,jrow) + rnfix(k)
-              ta_rbdeni(i,k,jrow) = ta_rbdeni(i,k,jrow) + rbdeni(k)
+     &                               + rmorpt_D(k,i,j)
+              ta_rnfix(i,k,jrow) = ta_rnfix(i,k,jrow) + rnfix(k,i,j)
+              ta_rbdeni(i,k,jrow) = ta_rbdeni(i,k,jrow) + rbdeni(k,i,j)
 #    if defined O_npzd_caco3
               ta_rnpp_C_dop(i,k,jrow) = ta_rnpp_C_dop(i,k,jrow) 
-     &             + rnpp_C_dop(k)   
+     &             + rnpp_C_dop(k,i,j)   
 #    endif              
 #   endif
 #   if defined O_kk_ballast
               ta_rgraz_Det_B(i,k,jrow) = ta_rgraz_Det_B(i,k,jrow)
-     &                                 + rgraz_Det_B(k)
+     &                                 + rgraz_Det_B(k,i,j)
 #   endif
 #   if defined O_npzd_caco3
 !       print*,'KK tracer', rcalatt(k), rcalpro(k)
               ta_rcalatt(i,k,jrow) = ta_rcalatt(i,k,jrow)
-     &                               + rcalatt(k)
+     &                               + rcalatt(k,i,j)
               ta_rprocal(i,k,jrow) = ta_rprocal(i,k,jrow)
-     &                               + rcalpro(k)
+     &                               + rcalpro(k,i,j)
               ta_rnpp_C(i,k,jrow) = ta_rnpp_C(i,k,jrow)
-     &                              + rnpp_C(k)
+     &                              + rnpp_C(k,i,j)
               ta_rgraz_C(i,k,jrow) = ta_rgraz_C(i,k,jrow)
-     &                               + rgraz_C(k)
+     &                               + rgraz_C(k,i,j)
               ta_rmorp_C(i,k,jrow) = ta_rmorp_C(i,k,jrow)
-     &                               + rmorp_C(k)
+     &                               + rmorp_C(k,i,j)
               ta_rmorpt_C(i,k,jrow)= ta_rmorpt_C(i,k,jrow)
-     &                               + rmorpt_C(k)
+     &                               + rmorpt_C(k,i,j)
 #   endif
 #   if defined O_npzd_iron
 #    if defined O_npzd_iron_diagnostics
               ta_rfeorgads(i,k,jrow) = ta_rfeorgads(i,k,jrow)
-     &                              + rfeorgads(k)
+     &                              + rfeorgads(k,i,j)
               ta_rdeffe(i,k,jrow) = ta_rdeffe(i,k,jrow)
-     &                              + rdeffe(k)
+     &                              + rdeffe(k,i,j)
               ta_rfeprime(i,k,jrow) = ta_rfeprime(i,k,jrow)
-     &                              + rfeprime(k)
+     &                              + rfeprime(k,i,j)
               ta_rfesed(i,k,jrow) = ta_rfesed(i,k,jrow)
-     &                              + rfesed(k)
+     &                              + rfesed(k,i,j)
               ta_rbfe(i,k,jrow) = ta_rbfe(i,k,jrow)
-     &                              + rbfe(k)
+     &                              + rbfe(k,i,j)
               ta_rfecol(i,k,jrow) = ta_rfecol(i,k,jrow)
-     &                              + rfecol(k)
+     &                              + rfecol(k,i,j)
 #     if defined O_npzd_caco3
               ta_rdeffe_C(i,k,jrow) = ta_rdeffe_C(i,k,jrow)
-     &                              + rdeffe_C(k)
+     &                              + rdeffe_C(k,i,j)
 #     endif                
 #    endif
 #   endif
 #   if defined O_npzd_extra_diagnostics
-              ta_ravej(i,k,jrow) = ta_ravej(i,k,jrow) + ravej(k)
-              ta_ravej_D(i,k,jrow) = ta_ravej_D(i,k,jrow) + ravej_D(k)
-              ta_rgmax(i,k,jrow) = ta_rgmax(i,k,jrow) + rgmax(k)
-              ta_rno3P(i,k,jrow) = ta_rno3P(i,k,jrow) + rno3P(k)
-              ta_rpo4P(i,k,jrow) = ta_rpo4P(i,k,jrow) + rpo4P(k)
-              ta_rpo4_D(i,k,jrow) = ta_rpo4_D(i,k,jrow) + rpo4_D(k)
+              ta_ravej(i,k,jrow) = ta_ravej(i,k,jrow) + ravej(k,i,j)
+              ta_ravej_D(i,k,jrow) = ta_ravej_D(i,k,jrow) + ravej_D(k,i,j)
+              ta_rgmax(i,k,jrow) = ta_rgmax(i,k,jrow) + rgmax(k,i,j)
+              ta_rno3P(i,k,jrow) = ta_rno3P(i,k,jrow) + rno3P(k,i,j)
+              ta_rpo4P(i,k,jrow) = ta_rpo4P(i,k,jrow) + rpo4P(k,i,j)
+              ta_rpo4_D(i,k,jrow) = ta_rpo4_D(i,k,jrow) + rpo4_D(k,i,j)
 #   endif
 #   if defined O_npzd_caco3
               ta_rdissl(i,k,jrow) = ta_rdissl(i,k,jrow)
-     &                              + rdissl(k)
+     &                              + rdissl(k,i,j)
               ta_rexpocaco3(i,k,jrow) =
-     &          ta_rexpocaco3(i,k,jrow) + rexpocaco3(k)
+     &          ta_rexpocaco3(i,k,jrow) + rexpocaco3(k,i,j)
 #   endif
 #   if defined O_kk_ballast
               ta_rremi_B(i,k,jrow) = ta_rremi_B(i,k,jrow)
-     &                                 + rremi_B(k)
+     &                                 + rremi_B(k,i,j)
               ta_rexpo_B(i,k,jrow) = ta_rexpo_B(i,k,jrow)
-     &                                 + rexpo_B(k) !ballast detritus
+     &                                 + rexpo_B(k,i,j) !ballast detritus
 #   endif              
               expo = expo*dztr(k)
-              ta_rremi(i,k,jrow) = ta_rremi(i,k,jrow) + rremi(k)
-              ta_rexpo(i,k,jrow) = ta_rexpo(i,k,jrow) + rexpo(k)
+              ta_rremi(i,k,jrow) = ta_rremi(i,k,jrow) + rremi(k,i,j)
+              ta_rexpo(i,k,jrow) = ta_rexpo(i,k,jrow) + rexpo(k,i,j)
               expo = expo - rprca*rcak(k)
               ta_rexpocal(i,k,jrow) = ta_rexpocal(i,k,jrow) + expo
               expo = expo*dzt(k)
 #   if defined O_npzd_nitrogen && defined O_npzd_o2
               ta_rwcdeni(i,k,jrow) = ta_rwcdeni(i,k,jrow) 
-     &           + rwcdeni(k)
+     &           + rwcdeni(k,i,j)
 #   endif
 #   if defined O_npzd_iron
                 ta_rremife(i,k,jrow) = ta_rremife(i,k,jrow) 
-     &               + rremife(k)
+     &               + rremife(k,i,j)
                 ta_rexpofe(i,k,jrow) = ta_rexpofe(i,k,jrow)
-     &               + rexpofe(k)
+     &               + rexpofe(k,i,j)
 #   endif 
 !
              enddo

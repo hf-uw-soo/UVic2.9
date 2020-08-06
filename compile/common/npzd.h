@@ -224,11 +224,12 @@
       common /npzd_r/ zprefC
 
       real            kcal, wc0, dissk0, rdissl,     wc
-      common /npzd_r/ kcal, wc0, dissk0, rdissl(km), wc(km)
+      common /npzd_r/ kcal, wc0, dissk0, rdissl(km,imt,jmw), wc(km)
       real            rcalatt,       rexpocaco3,     rimpocaco3
-      common /npzd_r/ rcalatt(kpzd), rexpocaco3(km), rimpocaco3(km)
+      common /npzd_r/ rcalatt(kpzd,imt,jmw), rexpocaco3(km,imt,jmw), 
+     &  rimpocaco3(km,imt,jmw)
       real            kc_c, rcalpro
-      common /npzd_r/ kc_c, rcalpro(kpzd)
+      common /npzd_r/ kc_c, rcalpro(kpzd,imt,jmw)
 
 # if defined O_npzd_iron
       real            kfeleq, alphamax, alphamin, lig, kfeorg, rfeton
@@ -250,46 +251,57 @@
 # endif
 # if defined O_save_npzd
       real rnpp, rgraz, rmorp, rmorpt, rmorz, rexcr, rremi, rexpo
-      common /npzd_r/ rnpp(kpzd), rgraz(kpzd), rmorp(kpzd), rmorpt(kpzd)
-      common /npzd_r/ rmorz(kpzd), rexcr(kpzd), rremi(km), rexpo(km)
+      common /npzd_r/ rnpp(kpzd,imt,jmw), rgraz(kpzd,imt,jmw), 
+     &  rmorp(kpzd,imt,jmw), rmorpt(kpzd,imt,jmw)
+      common /npzd_r/ rmorz(kpzd,imt,jmw), rexcr(kpzd,imt,jmw), 
+     &  rremi(km,imt,jmw), rexpo(km,imt,jmw)
       real rgraz_Det, rgraz_Z, rsedrr, rprca, rnpp_dop, rnpp_C_dop
-      common /npzd_r/ rgraz_Det(kpzd), rgraz_Z(kpzd), rsedrr, rprca
-      common /npzd_r/ rnpp_dop(kpzd), rnpp_C_dop(kpzd)
+      common /npzd_r/ rgraz_Det(kpzd,imt,jmw), rgraz_Z(kpzd,imt,jmw), 
+     &  rsedrr, rprca
+      common /npzd_r/ rnpp_dop(kpzd,imt,jmw), rnpp_C_dop(kpzd,imt,jmw)
 #  if defined O_npzd_caco3
       real            rnpp_C,       rgraz_C,       rmorp_C
-      common /npzd_r/ rnpp_C(kpzd), rgraz_C(kpzd), rmorp_C(kpzd)
+      common /npzd_r/ rnpp_C(kpzd,imt,jmw), rgraz_C(kpzd,imt,jmw), 
+     &  rmorp_C(kpzd,imt,jmw)
       real            rmorpt_C
-      common /npzd_r/ rmorpt_C(kpzd)
+      common /npzd_r/ rmorpt_C(kpzd,imt,jmw)
 #  endif
 #  if defined O_kk_ballast
       real            rgraz_Det_B,       rremi_B,     rexpo_B
-      common /npzd_r/ rgraz_Det_B(kpzd), rremi_B(km), rexpo_B(km)
+      common /npzd_r/ rgraz_Det_B(kpzd,imt,jmw), rremi_B(km,imt,jmw), 
+     &  rexpo_B(km,imt,jmw)
 #  endif
 #  if defined O_npzd_extra_diagnostics
       real ravej, ravej_D, rgmax, rno3P, rpo4P, rpo4_D
-      common /npzd_r/ ravej(kpzd), ravej_D(kpzd), rgmax(kpzd)
-      common /npzd_r/ rno3P(kpzd), rpo4P(kpzd), rpo4_D(kpzd)
+      common /npzd_r/ ravej(kpzd,imt,jmw), ravej_D(kpzd,imt,jmw), 
+     &  rgmax(kpzd,imt,jmw)
+      common /npzd_r/ rno3P(kpzd,imt,jmw), rpo4P(kpzd,imt,jmw), 
+     &  rpo4_D(kpzd,imt,jmw)
 #  endif
 #  if defined O_npzd_iron
       real            rremife,     rexpofe
-      common /npzd_r/ rremife(km), rexpofe(km)
+      common /npzd_r/ rremife(km,imt,jmw), rexpofe(km,imt,jmw)
 #   if defined O_npzd_iron_diagnostics
       real            rfeorgads,     rdeffe,     rfeprime
-      common /npzd_r/ rfeorgads(km), rdeffe(km), rfeprime(km)
+      common /npzd_r/ rfeorgads(km,imt,jmw), rdeffe(km,imt,jmw), 
+     &  rfeprime(km,imt,jmw)
       real            rfesed,     rbfe,     rfecol
-      common /npzd_r/ rfesed(km), rbfe(km), rfecol(km)
+      common /npzd_r/ rfesed(km,imt,jmw), rbfe(km,imt,jmw), 
+     &  rfecol(km,imt,jmw)
 #    if defined O_npzd_caco3
       real            rdeffe_C
-      common /npzd_r/ rdeffe_C(km)
+      common /npzd_r/ rdeffe_C(km,imt,jmw)
 #    endif     
 #   endif
 #  endif
 #  if defined O_npzd_nitrogen
       real rnpp_D, rgraz_D, rmorp_D, rmorpt_D, rnfix, rwcdeni, rbdeni
       real rnpp_D_dop
-      common /npzd_r/ rnpp_D(kpzd), rgraz_D(kpzd), rmorp_D(kpzd)	 
-      common /npzd_r/ rmorpt_D(kpzd), rnfix(kpzd), rwcdeni(km)
-      common /npzd_r/ rbdeni(km), rnpp_D_dop(kpzd)
+      common /npzd_r/ rnpp_D(kpzd,imt,jmw), rgraz_D(kpzd,imt,jmw), 
+     &  rmorp_D(kpzd,imt,jmw)	 
+      common /npzd_r/ rmorpt_D(kpzd,imt,jmw), rnfix(kpzd,imt,jmw), 
+     &  rwcdeni(km,imt,jmw)
+      common /npzd_r/ rbdeni(km,imt,jmw), rnpp_D_dop(kpzd,imt,jmw)
 
 #  endif
 # endif

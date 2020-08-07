@@ -322,6 +322,135 @@
 
       src = 0.0
 
+!$OMP PARALLEL DO DEFAULT(NONE)
+!$OMP&SHARED(js,je,joff,is,ie,kmt,tlat,radian,declin,kw,pi,tap,dnswr
+!$OMP&,ki,t,taum1,imobipo4,ipo4,imobiphyt,iphyt,imobizoop,izoop
+!$OMP&,imobidetr,idetr
+!$OMP&,itemp,sg_bathy,c2dtts,src,sbc,dzt
+#  if defined O_ice
+#   if defined O_ice_cpts
+!$OMP&,ncat,A,heff,hseff
+#   else
+!$OMP&,aice,hice,hsno
+#   endif
+#  endif
+#  if defined O_carbon            
+!$OMP&,imobidic,idic
+#  endif
+#  if defined O_npzd_nitrogen
+!$OMP&,imobidop,idop,imobino3,ino3,imobidon,idon,imobidiaz,idiaz
+#   if defined O_npzd_nitrogen_15
+!$OMP&,imobidin15,idin15,imobidon15,idon15,imobiphytn15,iphytn15
+!$OMP&,imobizoopn15,izoopn15,imobidetrn15,idetrn15,imobidiazn15
+!$OMP&,idiazn15
+#    if defined O_npzd_caco3
+!$OMP&,imobicoccn15,icoccn15
+#    endif            
+#   endif
+#  endif
+#  if defined O_npzd_caco3
+!$OMP&,imobicocc,icocc,imobicaco3,icaco3
+#  endif
+#  if defined O_kk_ballast
+!$OMP&,imobidetr_B,idetr_B
+#  endif
+#  if defined O_npzd_iron
+!$OMP&,imobidfe,idfe,imobidetrfe,idetrfe,isdfe,idfeadep,fe_hydr
+#  endif
+#  if defined O_carbon_13
+!$OMP&,imobidic13,idic13,imobidoc13,idoc13,imobiphytc13,iphytc13
+!$OMP&,imobizoopc13,izoopc13,imobidetrc13,idetrc13
+!$OMP&,imobidiazc13,idiazc13
+#   if defined O_npzd_caco3
+!$OMP&,imobicoccc13,icoccc13,imobicaco3c13,icaco3c13
+#   endif
+#  endif
+#  if defined O_npzd_o2
+!$OMP&,io2
+#  endif
+#  if defined O_carbon_13 || defined O_npzd_caco3
+!$OMP&,isalt,ialk
+#   if defined O_carbon_co2_2d
+!$OMP&,at
+#   else
+!$OMP&,co2ccn
+#   endif
+#  endif
+#  if defined O_sed
+!$OMP&,addflxo,eots,irorg,ircal
+#  endif
+#  if (defined O_time_averages || defined O_TMM) && defined O_save_npzd
+!$OMP&,timavgperts,euler2,dztr,ta_rremi,rremi,ta_rexpo,rexpo
+!$OMP&,rcak,ta_rexpocal,rprca
+#   if !defined O_npzd_caco3
+!$OMP&,ta_rprocal
+#   endif
+!$OMP&,ta_rnpp,rnpp,ta_rgraz,rgraz,ta_rgraz_Z,rgraz_Z,ta_rgraz_Det
+!$OMP&,rgraz_Det,ta_rmorp,rmorp,ta_rmorpt,rmorpt,ta_rmorz,rmorz
+!$OMP&,ta_rexcr,rexcr
+#   if defined O_npzd_nitrogen
+!$OMP&,ta_rnpp_dop,rnpp_dop,ta_rnpp_D,rnpp_D,ta_rnpp_D_dop,rnpp_D_dop
+!$OMP&,ta_rgraz_D,rgraz_D,ta_rmorp_D,rmorp_D,ta_rmorpt_D,rmorpt_D
+!$OMP&,ta_rnfix,rnfix,ta_rbdeni,rbdeni
+#    if defined O_npzd_caco3
+!$OMP&,ta_rnpp_C_dop,rnpp_C_dop
+#    endif
+#   endif
+#   if defined O_kk_ballast
+!$OMP&,ta_rgraz_Det_B,rgraz_Det_B
+#   endif
+#   if defined O_npzd_caco3
+!$OMP&,ta_rcalatt,rcalatt,ta_rprocal,rcalpro,ta_rnpp_C,rnpp_C
+!$OMP&,ta_rgraz_C,rgraz_C,ta_rmorp_C,rmorp_C,ta_rmorpt_C,rmorpt_C
+#   endif
+#   if defined O_npzd_iron
+#    if defined O_npzd_iron_diagnostics
+!$OMP&,ta_rfeorgads,rfeorgads,ta_rdeffe,rdeffe,ta_rfeprime,rfeprime
+!$OMP&,ta_rfesed,rfesed,ta_rbfe,rbfe,ta_rfecol,rfecol
+#     if defined O_npzd_caco3
+!$OMP&,ta_rdeffe_C,rdeffe_C
+#     endif   
+#    endif
+#   endif
+#   if defined O_npzd_extra_diagnostics
+!$OMP&,ta_ravej,ravej,ta_ravej_D,ravej_D,ta_rgmax,rgmax,ta_rno3P,rno3P
+!$OMP&,ta_rpo4P,rpo4P,ta_rpo4_D,rpo4_D
+#   endif
+#   if defined O_npzd_caco3
+!$OMP&,ta_rdissl,rdissl,ta_rexpocaco3,rexpocaco3
+#   endif
+#   if defined O_kk_ballast
+!$OMP&,ta_rremi_B,rremi_B,ta_rexpo_B,rexpo_B
+#   endif
+#   if defined O_npzd_nitrogen && defined O_npzd_o2
+!$OMP&,ta_rwcdeni,rwcdeni
+#   endif
+#   if defined O_npzd_iron
+!$OMP&,ta_rremife,rremife,ta_rexpofe,rexpofe
+#   endif
+#  endif
+!$OMP&)
+!$OMP&PRIVATE(j,jrow,i,k,n,ai,hi,hs,rctheta,dayfrac,swr,tnpzd
+!$OMP&,t_in,po4_in,sgb_in,expo
+#  if defined O_npzd_o2
+!$OMP&,o2_in
+#  endif
+#  if defined O_carbon_13 || defined O_npzd_caco3
+!$OMP&,s_in,dic_in,alk_in,co2_in
+#   if defined O_carbon_13
+!$OMP&,dic13_in
+#   endif
+#  endif
+#  if defined O_npzd_nitrogen
+!$OMP&,no3_in
+#   if defined O_npzd_nitrogen_15
+!$OMP&,din15_in
+#   endif
+#  endif
+#  if defined O_sed
+!$OMP&,sedcorgflx, sedcalflx
+#  endif
+!$OMP& )
       do j=js,je
         jrow = j + joff
         do i=is,ie

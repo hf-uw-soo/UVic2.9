@@ -502,13 +502,16 @@
 !-----------------------------------------------------------------------
 
       jlast = min(jend+1+joff,jmt-1) - joff
-!$OMP PARALLEL DO DEFAULT(NONE)
+!$OMP PARALLEL DEFAULT(NONE)
+!$OMP&SHARED(istrt,istrtm1,iend,js,jlast,n,taum1,adv_fb,adv_fe
+!$OMP&,adv_vbt,adv_vet,adv_vnt,adv_fn,t
 #  if defined O_gent_mcwilliams
-!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_fn,t,adv_vntiso)
-#  else
-!$OMP&SHARED(istrt,iend,js,jlast,n,taum1,adv_vnt,adv_fn,t)
+!$OMP&,adv_vbtiso,adv_vetiso,adv_vntiso
 #  endif
+!$OMP&)
 !$OMP&PRIVATE(totadv,j,k,i)
+
+!$OMP DO
       do j=js-1,jlast
         do k=1,km
           do i=istrt,iend
@@ -523,18 +526,9 @@
           enddo
         enddo
       enddo
-!$OMP END PARALLEL DO
+!$OMP END DO
 
-      jlast = min(jend+1+joff,jmt-1) - joff
-!$OMP PARALLEL DO DEFAULT(NONE)
-#  if defined O_gent_mcwilliams
-!$OMP&SHARED(istrt,istrtm1,iend,js,jlast,n,taum1,adv_fb,adv_fe,
-!$OMP&adv_vbt,adv_vet,t,adv_vbtiso,adv_vetiso)
-#  else
-!$OMP&SHARED(istrt,istrtm1,iend,js,jlast,n,taum1,adv_fb,adv_fe,
-!$OMP&adv_vbt,adv_vet,t)
-#  endif
-!$OMP&PRIVATE(totadv,j,k,i)
+!$OMP DO
       do j=js,jlast
         do k=1,km
           do i=istrtm1,iend
@@ -566,7 +560,9 @@
           adv_fb(i,km,j) = c0
         enddo
       enddo
-!$OMP END PARALLEL DO
+!$OMP END DO
+
+!$OMP END PARALLEL
 
 !-----------------------------------------------------------------------
 !     main j loop
@@ -605,15 +601,16 @@
 !       scheme flux (leap frog) minus the low order (upstream)
 !-----------------------------------------------------------------------
 
-!!$OMP PARALLEL DO DEFAULT(NONE)
+!$OMP PARALLEL DEFAULT(NONE)
+!$OMP&SHARED(istrt,istrtm1,iend,j,jp1,jp2,n,tau,adv_fb,adv_fe,adv_fn
+!$OMP&,adv_vbt,adv_vet,adv_vnt,anti_fb,anti_fe,anti_fn,t,tmask
 #  if defined O_gent_mcwilliams
-!!$OMP&SHARED(istrt,istrtm1,iend,j,jp1,jp2,n,tau,adv_fe,adv_fn,adv_vet,
-!!$OMP&adv_vnt,anti_fe,anti_fn,t,adv_vetiso,adv_vntiso)
-#  else
-!!$OMP&SHARED(istrt,istrtm1,iend,j,jp1,jp2,n,tau,adv_fe,adv_fn,adv_vet,
-!!$OMP&adv_fnt,anti_fe,anti_fn,t)
+!$OMP&,adv_vbtiso,adv_vetiso,adv_vntiso
 #  endif
-!!$OMP&PRIVATE(totadv,k,i)
+!$OMP&)
+!$OMP&PRIVATE(totadv,k,i)
+
+!$OMP DO
         do k=1,km
           do i=istrtm1,iend
             totadv = adv_vet(i,k,jp1)
@@ -632,16 +629,9 @@
      &                           t(i,k,jp2,n,tau)) - adv_fn(i,k,jp1)
           enddo
         enddo
-!!$OMP END PARALLEL DO
+!$OMP END DO
 
-!!$OMP PARALLEL DO DEFAULT(NONE)
-#  if defined O_gent_mcwilliams
-!!$OMP&SHARED(istrt,iend,j,jp1,n,tau,adv_fb,adv_vbt,adv_vbtiso,anti_fb,t,
-!!$OMP&tmask)
-#  else
-!!$OMP&SHARED(istrt,iend,j,jp1,n,tau,adv_fb,adv_vbt,anti_fb,t,tmask)
-#  endif
-!!$OMP&PRIVATE(totadv,k,i)
+!$OMP DO
         do k=1,kmm1
           do i=istrt,iend
             totadv = adv_vbt(i,k,jp1)
@@ -653,7 +643,9 @@
      &                           *tmask(i,k,j+1)
           enddo
         enddo
-!!$OMP END PARALLEL DO
+!$OMP END DO
+
+!$OMP END PARALLEL
 
         do i=istrt,iend
           anti_fb(i,0,j+1,n) = adv_vbt(i,0,j+1)*c2*t(i,1,j+1,n,taum1)
